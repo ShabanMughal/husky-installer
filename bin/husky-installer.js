@@ -4,10 +4,27 @@ import { select } from '@inquirer/prompts';
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 
+// Get package version dynamically
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const packageJsonPath = path.join(__dirname, '..', 'package.json');
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+const version = packageJson.version;
+
+// Create centered header
+const title = `🐕 Husky Installer CLI v${version}`;
+const boxWidth = 42;
+const padding = Math.floor((boxWidth - title.length - 2) / 2);
+const paddedTitle =
+  ' '.repeat(padding) +
+  title +
+  ' '.repeat(boxWidth - title.length - padding - 2);
+
 console.log(chalk.green.bold('\n╔════════════════════════════════════════╗'));
-console.log(chalk.green.bold('║     🐕 Husky Installer CLI v1.0.0     ║'));
+console.log(chalk.green.bold(`║${paddedTitle}║`));
 console.log(chalk.green.bold('╚════════════════════════════════════════╝\n'));
 
 function detectPackageManager() {
@@ -38,9 +55,25 @@ async function main() {
     try {
       execSync('git rev-parse --git-dir', { stdio: 'ignore' });
     } catch {
-      console.log(
-        chalk.red('❌ Not a git repository. Please run this in a git project.')
-      );
+      console.log(chalk.red.bold('\n❌ Git repository not found!\n'));
+      console.log(chalk.yellow('Husky requires a Git repository to work.\n'));
+      console.log(chalk.cyan('Please run these commands first:\n'));
+      console.log(chalk.white('  1. Initialize Git:'));
+      console.log(chalk.green('     git init\n'));
+      console.log(chalk.white('  2. Then run husky-installer again:'));
+      console.log(chalk.green('     npx husky-installer\n'));
+      process.exit(1);
+    }
+
+    // Check if package.json exists
+    if (!fs.existsSync(path.join(process.cwd(), 'package.json'))) {
+      console.log(chalk.red.bold('\n❌ package.json not found!\n'));
+      console.log(chalk.yellow('This tool requires a Node.js project.\n'));
+      console.log(chalk.cyan('Please run these commands first:\n'));
+      console.log(chalk.white('  1. Initialize npm project:'));
+      console.log(chalk.green('     npm init -y\n'));
+      console.log(chalk.white('  2. Then run husky-installer again:'));
+      console.log(chalk.green('     npx husky-installer\n'));
       process.exit(1);
     }
 
@@ -255,22 +288,36 @@ export default [
     );
     console.log(chalk.green('✓ Added husky:disable and husky:enable scripts'));
 
-    console.log(chalk.green.bold('\n✅ Husky installation complete!\n'));
-    console.log(chalk.yellow('Next steps:'));
-    console.log(chalk.white('  1. Review the generated configuration files'));
-    console.log(chalk.white('  2. Make your first commit to test the hooks'));
     console.log(
-      chalk.white('  3. Customize the hooks in .husky/ directory as needed')
+      chalk.green.bold('\n╔════════════════════════════════════════╗')
     );
-    console.log(chalk.cyan('\n💡 Useful commands:'));
+    console.log(chalk.green.bold('║  ✅ Installation Complete!            ║'));
+    console.log(
+      chalk.green.bold('╚════════════════════════════════════════╝\n')
+    );
+
+    console.log(chalk.cyan('📝 What was installed:\n'));
+    if (usePrettier)
+      console.log(chalk.white('   ✓ Prettier (code formatting)'));
+    if (useEslint) console.log(chalk.white('   ✓ ESLint (code linting)'));
+    if (useEmoji) console.log(chalk.white('   ✓ Commit emoji prefixes'));
+    console.log(chalk.white('   ✓ Git hooks configured\n'));
+
+    console.log(chalk.yellow('🚀 Try it now:\n'));
+    console.log(chalk.white('   1. Stage some files:'));
+    console.log(chalk.green('      git add .\n'));
+    console.log(chalk.white('   2. Make a commit:'));
+    console.log(chalk.green('      git commit -m "feat: test husky hooks"\n'));
+
+    console.log(chalk.cyan('💡 Useful commands:\n'));
     console.log(
       chalk.white(
-        `  ${packageManager} run husky:disable  - Temporarily disable Husky hooks`
+        `   ${packageManager} run husky:disable  ${chalk.gray('# Temporarily disable hooks')}`
       )
     );
     console.log(
       chalk.white(
-        `  ${packageManager} run husky:enable   - Re-enable Husky hooks\n`
+        `   ${packageManager} run husky:enable   ${chalk.gray('# Re-enable hooks')}\n`
       )
     );
   } catch (error) {
@@ -278,7 +325,36 @@ export default [
       console.log(chalk.yellow('\n⚠️  Installation cancelled by user.\n'));
       process.exit(0);
     }
-    console.error(chalk.red('\n❌ Error:'), error.message);
+
+    console.log(chalk.red.bold('\n❌ Installation failed!\n'));
+    console.log(chalk.yellow('Error details:'));
+    console.log(chalk.white(`  ${error.message}\n`));
+
+    if (
+      error.message.includes('EACCES') ||
+      error.message.includes('permission')
+    ) {
+      console.log(chalk.cyan('💡 Try running with elevated permissions:\n'));
+      console.log(chalk.green('   sudo npx husky-installer\n'));
+    } else if (
+      error.message.includes('ENOENT') ||
+      error.message.includes('not found')
+    ) {
+      console.log(
+        chalk.cyan('💡 Make sure you have the required tools installed:\n')
+      );
+      console.log(chalk.white('   - Node.js >= 18.0.0'));
+      console.log(chalk.white('   - Git'));
+      console.log(chalk.white('   - npm/yarn/pnpm/bun\n'));
+    } else {
+      console.log(chalk.cyan('💡 For help, please report this issue:\n'));
+      console.log(
+        chalk.green(
+          '   https://github.com/ShabanMughal/husky-installer/issues\n'
+        )
+      );
+    }
+
     process.exit(1);
   }
 }

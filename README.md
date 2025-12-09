@@ -15,19 +15,22 @@ Interactive CLI and web interface for setting up Husky git hooks with Prettier, 
 - 🎭 **Commit Prefixes** - Auto-add emojis to conventional commits
 - ⚙️ **Easy Control** - Enable/disable hooks with simple commands
 
-## 📦 Installation
+## 📦 Usage
 
-### Global Installation (Recommended)
-
-```bash
-npm install -g husky-installer
-```
-
-### One-time Use (npx)
+### Recommended: Use with npx (no installation needed)
 
 ```bash
 npx husky-installer
 ```
+
+### Alternative: Global Installation
+
+```bash
+npm install -g husky-installer
+husky-installer
+```
+
+> **Note:** Don't use `npm install husky-installer` in your project - use `npx` instead!
 
 ## 🚀 Quick Start
 
@@ -114,7 +117,7 @@ The installer sets up:
 ## 📋 Requirements
 
 - Node.js >= 18.0.0
-- Git repository initialized
+- **Git repository initialized** (`git init` must be run first)
 - npm, yarn, pnpm, or bun
 
 ## 🎨 CLI Preview
