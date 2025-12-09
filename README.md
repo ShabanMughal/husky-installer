@@ -70,18 +70,21 @@ bun preview
 ## Commit Prefix Examples
 
 ### Shortcodes (`:sparkles:`)
+
 ```
 feat: add user authentication → :sparkles: feat: add user authentication
 fix: resolve login bug → :bug: fix: resolve login bug
 ```
 
 ### Plain Tags (`[feat]`)
+
 ```
 feat: add user authentication → [feat] feat: add user authentication
 fix: resolve login bug → [fix] fix: resolve login bug
 ```
 
 ### Emoji Characters (✨)
+
 ```
 feat: add user authentication → ✨ feat: add user authentication
 fix: resolve login bug → 🐛 fix: resolve login bug

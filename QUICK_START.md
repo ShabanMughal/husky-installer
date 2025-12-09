@@ -6,7 +6,8 @@
 
 ```bash
 # From any project directory where you want Husky:
-node D:\JSM\husky\packages\husky-installer\bin\husky-installar.js
+node D:\JSM\husky\husky-installer\bin\husky-installer.js
+
 ```
 
 Or use npm link for easier access:
@@ -38,12 +39,14 @@ bun dev
 ## 📦 What Each Package Does
 
 ### 1. CLI Package (`packages/husky-installer/`)
+
 - **Interactive terminal prompts** with arrow key navigation
 - Automatically installs dependencies
 - Creates hooks and config files
 - Best for: Quick setup, automation, CI/CD
 
 ### 2. Web App (`husky-installer/`)
+
 - **Visual interface** in your browser
 - Generates commands to copy/paste
 - Download config files
@@ -90,11 +93,11 @@ git commit -m "feat: add awesome feature"
 
 ## 📝 Summary
 
-| Method | Command | Best For |
-|--------|---------|----------|
-| **CLI Direct** | `node packages/husky-installer/bin/husky-installar.js` | One-time use |
-| **CLI Linked** | `npm link` then `husky-installar` | Frequent use |
-| **Web Local** | `cd husky-installer && bun dev` | Visual config |
-| **Web Deployed** | Deploy to Vercel/Netlify | Team sharing |
+| Method           | Command                                                | Best For      |
+| ---------------- | ------------------------------------------------------ | ------------- |
+| **CLI Direct**   | `node packages/husky-installer/bin/husky-installar.js` | One-time use  |
+| **CLI Linked**   | `npm link` then `husky-installar`                      | Frequent use  |
+| **Web Local**    | `cd husky-installer && bun dev`                        | Visual config |
+| **Web Deployed** | Deploy to Vercel/Netlify                               | Team sharing  |
 
 Choose the method that fits your workflow! 🎉

@@ -21,18 +21,21 @@ node D:\JSM\husky\packages\husky-installer\bin\husky-installar.js
 ### Method B: Using npm link (Recommended for CLI)
 
 1. **Link the package globally** (run once from the husky-installer package):
+
 ```bash
 cd packages/husky-installer
 npm link
 ```
 
 2. **Use it anywhere**:
+
 ```bash
 # Now you can run from any project directory
 husky-installar
 ```
 
 3. **Unlink when done**:
+
 ```bash
 npm unlink -g husky-installar
 ```
@@ -105,6 +108,7 @@ bun preview
 ### Deploy Options
 
 The built files in `dist/` can be deployed to:
+
 - **Vercel**: `vercel deploy`
 - **Netlify**: Drag & drop the `dist` folder
 - **GitHub Pages**: Push `dist` to gh-pages branch
@@ -158,6 +162,7 @@ bun dev
 After running the installer in your project:
 
 1. **Test pre-commit hook**:
+
 ```bash
 # Make a change
 echo "console.log('test')" > test.js
@@ -167,12 +172,14 @@ git commit -m "test: add test file"
 ```
 
 2. **Test commit-msg hook**:
+
 ```bash
 git commit -m "feat: add new feature"
 # Should auto-prefix with emoji/tag
 ```
 
 3. **View the commit**:
+
 ```bash
 git log -1
 # Should show: ✨ feat: add new feature (or :sparkles: or [feat])
@@ -185,6 +192,7 @@ git log -1
 ### CLI: "command not found"
 
 Make sure you're using the full path or have linked the package:
+
 ```bash
 node D:\JSM\husky\packages\husky-installer\bin\husky-installar.js
 ```
@@ -196,6 +204,7 @@ Vite will automatically try the next available port. Check the terminal output f
 ### Hooks not running
 
 Make sure:
+
 1. You're in a git repository (`git init` if needed)
 2. Hooks have execute permissions (should be automatic)
 3. You ran `npx husky install` or `npm install` (which runs the prepare script)
