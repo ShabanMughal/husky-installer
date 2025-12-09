@@ -348,9 +348,9 @@ const colors = {
 };
 
 console.log('');
-console.log(colors.cyan + '╔════════════════════════════════════════╗' + colors.reset);
+console.log(colors.cyan + '╔═══════════════════════════════════════════════╗' + colors.reset);
 console.log(colors.cyan + '║     🐕 Husky Installer Commit Message Hook      ║' + colors.reset);
-console.log(colors.cyan + '╚════════════════════════════════════════╝' + colors.reset);
+console.log(colors.cyan + '╚═══════════════════════════════════════════════╝' + colors.reset);
 console.log('');
 
 // If message already has prefix, skip
