@@ -145,32 +145,17 @@ async function main() {
     if (usePrettier || useEslint) {
       console.log(chalk.cyan('\n🪝 Creating pre-commit hook...\n'));
 
-      let preCommitContent = `echo ""
-echo "\\033[36m╔════════════════════════════════════════╗\\033[0m"
-echo "\\033[36m║     🐕 Husky Pre-commit Hook          ║\\033[0m"
-echo "\\033[36m╚════════════════════════════════════════╝\\033[0m"
-echo ""
-`;
+      let preCommitContent = '';
 
       if (usePrettier) {
-        preCommitContent += `echo "\\033[33m→ Running Prettier...\\033[0m"
-npx prettier --write . --ignore-path .gitignore && git add .
-echo "\\033[32m✓ Prettier completed\\033[0m"
-echo ""
+        preCommitContent += `npx prettier --write . --ignore-path .gitignore > /dev/null 2>&1 && git add .
 `;
       }
 
       if (useEslint) {
-        preCommitContent += `echo "\\033[33m→ Running ESLint...\\033[0m"
-npx eslint . --fix --ignore-pattern ".husky/*" && git add .
-echo "\\033[32m✓ ESLint completed\\033[0m"
-echo ""
+        preCommitContent += `npx eslint . --fix --ignore-pattern ".husky/*" > /dev/null 2>&1 && git add .
 `;
       }
-
-      preCommitContent += `echo "\\033[32m✓ All checks passed!\\033[0m"
-echo ""
-`;
 
       fs.writeFileSync(path.join(huskyDir, 'pre-commit'), preCommitContent, {
         mode: 0o755,
