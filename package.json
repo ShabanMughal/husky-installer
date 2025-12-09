@@ -1,10 +1,40 @@
 {
   "name": "husky-installer",
-  "private": true,
   "version": "1.0.0",
+  "description": "Interactive CLI and web interface for setting up Husky git hooks with Prettier, ESLint, and commit conventions",
   "type": "module",
   "bin": {
     "husky-installer": "./bin/husky-installer.js"
+  },
+  "main": "./bin/husky-installer.js",
+  "files": [
+    "bin",
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "husky",
+    "git-hooks",
+    "prettier",
+    "eslint",
+    "commit",
+    "emoji",
+    "conventional-commits",
+    "cli",
+    "interactive"
+  ],
+  "author": "Shaban Mughal",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ShabanMughal/husky-installer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ShabanMughal/husky-installer/issues"
+  },
+  "homepage": "https://github.com/ShabanMughal/husky-installer#readme",
+  "engines": {
+    "node": ">=18.0.0"
   },
   "scripts": {
     "dev": "vite",

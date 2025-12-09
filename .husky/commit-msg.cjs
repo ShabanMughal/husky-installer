@@ -14,7 +14,9 @@ const colors = {
 
 console.log('');
 console.log(
-  colors.cyan + '╔════════════════════════════════════════╗' + colors.reset
+  colors.cyan +
+    '╔═══════════════════════════════════════════════╗' +
+    colors.reset
 );
 console.log(
   colors.cyan +
@@ -22,7 +24,9 @@ console.log(
     colors.reset
 );
 console.log(
-  colors.cyan + '╚════════════════════════════════════════╝' + colors.reset
+  colors.cyan +
+    '╚═══════════════════════════════════════════════╝' +
+    colors.reset
 );
 console.log('');
 

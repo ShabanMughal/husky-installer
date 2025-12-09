@@ -1,119 +1,172 @@
-# Husky Installer - Web Interface
+# 🐕 Husky Installer
 
-Interactive web application for setting up Husky git hooks with Prettier, ESLint, and conventional commit prefixes.
+Interactive CLI and web interface for setting up Husky git hooks with Prettier, ESLint, and commit conventions.
 
-## Features
+[![npm version](https://img.shields.io/npm/v/husky-installer.svg)](https://www.npmjs.com/package/husky-installer)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-- **Interactive Configuration**: Choose which tools to integrate (Prettier, ESLint)
-- **Commit Conventions**: Auto-prefix commits with emojis, shortcodes, or tags
-- **Multiple Package Managers**: Support for npm, yarn, pnpm, and bun
-- **Command Generation**: Get ready-to-run terminal commands
-- **Config File Downloads**: Download pre-configured .prettierrc, .eslintrc.json, and commit-msg.js
-- **Modern UI**: Clean, responsive interface with dark theme
+## ✨ Features
 
-## What It Does
+- 🎯 **Interactive CLI** - Beautiful terminal prompts with auto-detection
+- 🌐 **Web Interface** - Modern web UI for visual configuration
+- 🚀 **Auto-detect Package Manager** - Detects npm, yarn, pnpm, or bun from lock files
+- 🎨 **Prettier Integration** - Auto-format code on commit
+- 🔍 **ESLint Integration** - Auto-fix linting issues on commit
+- 🎭 **Commit Prefixes** - Auto-add emojis to conventional commits
+- ⚙️ **Easy Control** - Enable/disable hooks with simple commands
 
-This web app generates all the commands and configuration files needed to:
+## 📦 Installation
 
-1. Install Husky and optional dev dependencies (Prettier, ESLint)
-2. Set up git hooks for pre-commit checks
-3. Configure commit message prefixes based on conventional commit types
-4. Create configuration files for Prettier and ESLint
+### Global Installation (Recommended)
 
-## Usage
+```bash
+npm install -g husky-installer
+```
 
-### Development
+### One-time Use (npx)
+
+```bash
+npx husky-installer
+```
+
+## 🚀 Quick Start
+
+### CLI Usage
+
+Simply run in your project directory:
+
+```bash
+husky-installer
+```
+
+The CLI will:
+
+1. ✅ Auto-detect your package manager
+2. ✅ Ask if you want Prettier (code formatting)
+3. ✅ Ask if you want ESLint (code linting)
+4. ✅ Ask if you want commit prefixes
+5. ✅ Install and configure everything automatically!
+
+### Web Interface
 
 ```bash
 npm run dev
-# or
-bun dev
 ```
 
-### Build
+Then open your browser to configure visually and copy the commands.
+
+## 🎭 Commit Prefix Examples
+
+When enabled, your commits get automatic emoji prefixes:
 
 ```bash
-npm run build
-# or
-bun run build
+git commit -m "feat: add login"     → 🚀 feat: add login
+git commit -m "fix: button bug"     → 🐛 fix: button bug
+git commit -m "docs: update readme" → 📝 docs: update readme
+git commit -m "style: format code"  → 🎨 style: format code
+git commit -m "test: add tests"     → ✅ test: add tests
+git commit -m "perf: optimize"      → ⚡ perf: optimize
+git commit -m "refactor: cleanup"   → ♻️ refactor: cleanup
+git commit -m "chore: update deps"  → 🔧 chore: update deps
 ```
 
-### Preview Production Build
+### Supported Commit Types
+
+| Type       | Emoji | Description      |
+| ---------- | ----- | ---------------- |
+| `feat`     | 🚀    | New features     |
+| `fix`      | 🐛    | Bug fixes        |
+| `docs`     | 📝    | Documentation    |
+| `style`    | 🎨    | Code style       |
+| `refactor` | ♻️    | Code refactoring |
+| `perf`     | ⚡    | Performance      |
+| `test`     | ✅    | Tests            |
+| `chore`    | 🔧    | Maintenance      |
+| `build`    | 📦    | Build system     |
+| `ci`       | ⚙️    | CI/CD            |
+| `breaking` | 💥    | Breaking changes |
+| `hotfix`   | 🔥    | Urgent fixes     |
+| `wip`      | 🚧    | Work in progress |
+| `release`  | 🔖    | Releases         |
+
+## 🎮 Control Commands
+
+After installation, you get these npm scripts:
 
 ```bash
-npm run preview
-# or
-bun preview
+# Temporarily disable Husky hooks
+npm run husky:disable
+
+# Re-enable Husky hooks
+npm run husky:enable
 ```
 
-## How to Use the App
+## 🛠️ What Gets Installed
 
-1. **Configure Your Setup**:
-   - Check/uncheck Prettier and ESLint options
-   - Enable commit prefixes if desired
-   - Choose your preferred prefix style (shortcodes, tags, or emoji characters)
-   - Select your package manager
+The installer sets up:
 
-2. **Generate Commands**:
-   - Click "Generate Commands" button
-   - Copy the commands and run them in your project terminal
+- ✅ Husky git hooks
+- ✅ Pre-commit hook (runs Prettier/ESLint)
+- ✅ Commit-msg hook (adds emoji prefixes)
+- ✅ Configuration files (.prettierrc, eslint.config.js)
+- ✅ Control scripts (enable/disable hooks)
 
-3. **Download Config Files**:
-   - Download the generated configuration files
-   - Place them in your project root
-   - Place `commit-msg.js` in the `.husky/` folder
+## 📋 Requirements
 
-4. **Test Your Setup**:
-   - Make a commit with a conventional type (e.g., "feat: add new feature")
-   - Watch as hooks automatically format code and add prefixes!
+- Node.js >= 18.0.0
+- Git repository initialized
+- npm, yarn, pnpm, or bun
 
-## Commit Prefix Examples
-
-### Shortcodes (`:sparkles:`)
+## 🎨 CLI Preview
 
 ```
-feat: add user authentication → :sparkles: feat: add user authentication
-fix: resolve login bug → :bug: fix: resolve login bug
+╔════════════════════════════════════════╗
+║     🐕 Husky Installer CLI v1.0.0     ║
+╚════════════════════════════════════════╝
+
+📦 Detected package manager: npm
+
+? Do you want to add Prettier (code formatting)?
+  ❯ Yes
+    No
+
+? Do you want to add ESLint (code linting)?
+  ❯ Yes
+    No
+
+? Enable automatic commit prefixes?
+  ❯ Yes
+    No
+
+📋 Commit prefix examples:
+
+  feat: add login     →  🚀 feat: add login
+  fix: button bug     →  🐛 fix: button bug
+  docs: update readme →  📝 docs: update readme
+  ...
+
+📦 Installing dependencies...
+⚙️  Configuring Husky...
+🪝 Creating pre-commit hook...
+📝 Creating commit-msg hook...
+
+✅ Husky installation complete!
 ```
 
-### Plain Tags (`[feat]`)
+## 🤝 Contributing
 
-```
-feat: add user authentication → [feat] feat: add user authentication
-fix: resolve login bug → [fix] fix: resolve login bug
-```
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-### Emoji Characters (✨)
+## 📄 License
 
-```
-feat: add user authentication → ✨ feat: add user authentication
-fix: resolve login bug → 🐛 fix: resolve login bug
-```
+MIT © Shaban Mughal
 
-## Supported Commit Types
+## 🔗 Links
 
-- `feat` - New features
-- `fix` - Bug fixes
-- `chore` - Maintenance tasks
-- `docs` - Documentation changes
-- `refactor` - Code refactoring
-- `test` - Test additions/changes
-- `style` - Code style changes
-- `perf` - Performance improvements
-- `build` - Build system changes
-- `ci` - CI/CD changes
+- [GitHub Repository](https://github.com/ShabanMughal/husky-installer)
+- [npm Package](https://www.npmjs.com/package/husky-installer)
+- [Report Issues](https://github.com/ShabanMughal/husky-installer/issues)
 
-## Tech Stack
+## ⭐ Show Your Support
 
-- React 19
-- TypeScript
-- Vite
-- Lucide React (icons)
-
-## Related
-
-This web interface is based on the [husky-installar](../packages/husky-installer) CLI package in this monorepo.
-
-## License
-
-MIT
+Give a ⭐️ if this project helped you!

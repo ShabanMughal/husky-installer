@@ -1,0 +1,36 @@
+# Source files
+src/
+public/
+.vscode/
+.husky/
+
+# Config files
+.eslintrc*
+.prettierrc
+tsconfig*.json
+vite.config.ts
+tailwind.config.js
+eslint.config.js
+
+# Development files
+*.log
+.DS_Store
+node_modules/
+.git/
+.gitignore
+
+# Build artifacts (keep dist for web version)
+# dist/
+
+# Documentation (keep README)
+LOCAL_USAGE.md
+QUICK_START.md
+
+# Test files
+*.test.js
+*.spec.js
+
+# IDE
+.idea/
+*.swp
+*.swo
