@@ -49,6 +49,76 @@ function detectPackageManager() {
   return 'npm'; // default
 }
 
+function detectFramework() {
+  const cwd = process.cwd();
+  const packageJsonPath = path.join(cwd, 'package.json');
+
+  if (!fs.existsSync(packageJsonPath)) {
+    return { name: 'unknown', ignorePatterns: [] };
+  }
+
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+  const deps = {
+    ...packageJson.dependencies,
+    ...packageJson.devDependencies,
+  };
+
+  // Framework detection with ignore patterns
+  const frameworks = {
+    next: {
+      check: () => deps['next'],
+      ignorePatterns: ['.next', 'out', '.vercel'],
+      name: 'Next.js',
+    },
+    react: {
+      check: () => deps['react'] && !deps['next'] && !deps['gatsby'],
+      ignorePatterns: ['build', 'dist'],
+      name: 'React',
+    },
+    vue: {
+      check: () => deps['vue'] || deps['nuxt'],
+      ignorePatterns: ['.nuxt', 'dist', '.output'],
+      name: deps['nuxt'] ? 'Nuxt' : 'Vue',
+    },
+    angular: {
+      check: () => deps['@angular/core'],
+      ignorePatterns: ['dist', '.angular'],
+      name: 'Angular',
+    },
+    svelte: {
+      check: () => deps['svelte'] || deps['@sveltejs/kit'],
+      ignorePatterns: ['.svelte-kit', 'build'],
+      name: deps['@sveltejs/kit'] ? 'SvelteKit' : 'Svelte',
+    },
+    astro: {
+      check: () => deps['astro'],
+      ignorePatterns: ['dist', '.astro'],
+      name: 'Astro',
+    },
+    gatsby: {
+      check: () => deps['gatsby'],
+      ignorePatterns: ['.cache', 'public'],
+      name: 'Gatsby',
+    },
+    vite: {
+      check: () => deps['vite'] && !deps['astro'] && !deps['@sveltejs/kit'],
+      ignorePatterns: ['dist'],
+      name: 'Vite',
+    },
+  };
+
+  for (const [key, framework] of Object.entries(frameworks)) {
+    if (framework.check()) {
+      return {
+        name: framework.name,
+        ignorePatterns: framework.ignorePatterns,
+      };
+    }
+  }
+
+  return { name: 'Node.js', ignorePatterns: ['dist', 'build'] };
+}
+
 async function main() {
   try {
     // Check if in a git repository
@@ -77,10 +147,15 @@ async function main() {
       process.exit(1);
     }
 
-    // Auto-detect package manager
+    // Auto-detect package manager and framework
     const packageManager = detectPackageManager();
+    const framework = detectFramework();
+
     console.log(
-      chalk.cyan(`📦 Detected package manager: ${chalk.bold(packageManager)}\n`)
+      chalk.cyan(`📦 Detected package manager: ${chalk.bold(packageManager)}`)
+    );
+    console.log(
+      chalk.cyan(`🎯 Detected framework: ${chalk.bold(framework.name)}\n`)
     );
 
     // Ask about Prettier
@@ -180,20 +255,37 @@ async function main() {
 
       let preCommitContent = '';
 
+      // Build ignore patterns
+      const ignorePatterns = [
+        'node_modules',
+        '.husky',
+        ...framework.ignorePatterns,
+      ];
+
       if (usePrettier) {
-        preCommitContent += `npx prettier --write . --ignore-path .gitignore > /dev/null 2>&1 && git add .
+        const prettierIgnores = ignorePatterns
+          .map((p) => `--ignore-path .gitignore`)
+          .join(' ');
+        preCommitContent += `npx prettier --write . --ignore-path .gitignore && git add .
 `;
       }
 
       if (useEslint) {
-        preCommitContent += `npx eslint . --fix --ignore-pattern ".husky/*" > /dev/null 2>&1 && git add .
+        const eslintIgnores = ignorePatterns
+          .map((p) => `--ignore-pattern "${p}"`)
+          .join(' ');
+        preCommitContent += `npx eslint . --fix ${eslintIgnores} && git add .
 `;
       }
 
       fs.writeFileSync(path.join(huskyDir, 'pre-commit'), preCommitContent, {
         mode: 0o755,
       });
-      console.log(chalk.green('✓ Created .husky/pre-commit'));
+      console.log(
+        chalk.green(
+          `✓ Created .husky/pre-commit (ignoring: ${ignorePatterns.join(', ')})`
+        )
+      );
     }
 
     // Create commit-msg hook
@@ -223,6 +315,21 @@ async function main() {
         printWidth: 80,
       };
       fs.writeFileSync('.prettierrc', JSON.stringify(prettierConfig, null, 2));
+
+      // Create .prettierignore with framework-specific patterns
+      const prettierIgnore = [
+        'node_modules',
+        'package-lock.json',
+        'yarn.lock',
+        'pnpm-lock.yaml',
+        'bun.lockb',
+        ...framework.ignorePatterns,
+      ].join('\n');
+
+      fs.writeFileSync('.prettierignore', prettierIgnore + '\n');
+      console.log(
+        chalk.green(`✓ Created .prettierignore (${framework.name} optimized)`)
+      );
     }
 
     if (useEslint) {
@@ -248,13 +355,19 @@ async function main() {
           chalk.gray('   ignores: ["dist", ".husky", "node_modules"]')
         );
       } else {
-        // Create basic flat config
+        // Create basic flat config with framework-specific ignores
+        const eslintIgnores = [
+          'node_modules',
+          '.husky',
+          ...framework.ignorePatterns,
+        ];
+
         const eslintFlatConfig = `import js from '@eslint/js';
 
 export default [
   js.configs.recommended,
   {
-    ignores: ['dist', '.husky', 'node_modules', 'build'],
+    ignores: ${JSON.stringify(eslintIgnores)},
   },
   {
     languageOptions: {
@@ -297,11 +410,21 @@ export default [
     );
 
     console.log(chalk.cyan('📝 What was installed:\n'));
+    console.log(chalk.white(`   ✓ Framework: ${framework.name}`));
     if (usePrettier)
       console.log(chalk.white('   ✓ Prettier (code formatting)'));
     if (useEslint) console.log(chalk.white('   ✓ ESLint (code linting)'));
     if (useEmoji) console.log(chalk.white('   ✓ Commit emoji prefixes'));
-    console.log(chalk.white('   ✓ Git hooks configured\n'));
+    console.log(chalk.white('   ✓ Git hooks configured'));
+    if (framework.ignorePatterns.length > 0) {
+      console.log(
+        chalk.gray(
+          `   ✓ Auto-ignoring: ${framework.ignorePatterns.join(', ')}\n`
+        )
+      );
+    } else {
+      console.log('');
+    }
 
     console.log(chalk.yellow('🚀 Try it now:\n'));
     console.log(chalk.white('   1. Stage some files:'));
