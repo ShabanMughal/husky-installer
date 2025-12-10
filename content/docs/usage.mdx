@@ -1,0 +1,44 @@
+# Usage
+
+## CLI Mode
+
+Run the interactive CLI:
+
+```bash
+npx husky-installer
+```
+
+The CLI will guide you through:
+
+1. Selecting commit message format (emoji or conventional)
+2. Choosing hooks to install (pre-commit, commit-msg)
+3. Configuring Prettier and ESLint
+4. Setting up Husky
+
+## Web Interface
+
+Start the web interface:
+
+```bash
+npm run dev
+```
+
+Then open your browser to configure visually.
+
+## Available Hooks
+
+### Pre-commit Hook
+
+Runs before each commit to:
+
+- Format code with Prettier
+- Lint code with ESLint
+- Run tests (optional)
+
+### Commit Message Hook
+
+Validates commit messages to ensure they follow:
+
+- Conventional Commits format
+- Emoji commit format
+- Custom patterns

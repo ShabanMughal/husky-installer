@@ -1,0 +1,63 @@
+# Configuration
+
+## Husky Configuration
+
+Husky hooks are stored in the `.husky` directory. You can customize them by editing the hook files.
+
+## Prettier Configuration
+
+Create a `.prettierrc` file in your project root:
+
+```json
+{
+  "semi": true,
+  "trailingComma": "all",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2
+}
+```
+
+## ESLint Configuration
+
+Create an `eslint.config.js` file:
+
+```javascript
+export default [
+  {
+    rules: {
+      'no-console': 'warn',
+      'no-unused-vars': 'error',
+    },
+  },
+];
+```
+
+## Commit Message Formats
+
+### Conventional Commits
+
+```
+type(scope): subject
+
+body
+
+footer
+```
+
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+
+### Emoji Commits
+
+```
+:emoji: subject
+
+body
+```
+
+Common emojis:
+
+- ✨ `:sparkles:` - New feature
+- 🐛 `:bug:` - Bug fix
+- 📝 `:memo:` - Documentation
+- 🎨 `:art:` - Code style

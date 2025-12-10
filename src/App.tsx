@@ -1,55 +1,44 @@
-import { useState } from 'react';
-import { Terminal } from 'lucide-react';
-import { Header, Footer, ConfigSection, OutputSection } from './components';
+import { Github, BookOpen } from 'lucide-react';
 import './App.css';
 
-type EmojiStyle = 'shortcode' | 'tag' | 'emoji';
-type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
-
-interface Config {
-  usePrettier: boolean;
-  useEslint: boolean;
-  useEmoji: boolean;
-  emojiStyle: EmojiStyle;
-  packageManager: PackageManager;
-}
-
 function App() {
-  const [config, setConfig] = useState<Config>({
-    usePrettier: true,
-    useEslint: true,
-    useEmoji: true,
-    emojiStyle: 'shortcode',
-    packageManager: 'npm',
-  });
-
-  const [showCommands, setShowCommands] = useState(false);
-
   return (
-    <div className="min-h-screen bg-black flex flex-col font-mono">
-      <Header />
-
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-6">
-        <ConfigSection config={config} setConfig={setConfig} />
-
-        <div className="mt-6">
-          <button
-            onClick={() => setShowCommands(!showCommands)}
-            className="w-full bg-black border border-green-500 text-green-400 px-4 py-2 text-sm hover:bg-green-500 hover:text-black transition-all"
-          >
-            <Terminal className="w-4 h-4 inline mr-2" />
-            {showCommands ? '[ Hide Output ]' : '[ Generate Commands ]'}
-          </button>
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-4">
+      <div className="max-w-4xl w-full text-center">
+        <div className="mb-8">
+          <h1 className="text-6xl font-bold mb-4">Husky Installer</h1>
+          <p className="text-xl text-muted-foreground mb-8">
+            Interactive CLI and web interface for setting up Husky git hooks
+            with Prettier, ESLint, and commit conventions
+          </p>
         </div>
 
-        {showCommands && (
-          <div className="mt-6">
-            <OutputSection config={config} />
-          </div>
-        )}
-      </main>
+        <div className="flex gap-4 justify-center items-center flex-wrap">
+          <a
+            href="/docs"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+          >
+            <BookOpen className="w-5 h-5" />
+            Documentation
+          </a>
+          <a
+            href="https://github.com/ShabanMughal/husky-installer"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+          >
+            <Github className="w-5 h-5" />
+            GitHub
+          </a>
+        </div>
 
-      <Footer />
+        <div className="mt-12 p-6 bg-card rounded-lg border border-border">
+          <p className="text-muted-foreground text-sm mb-3">Quick Start</p>
+          <code className="text-primary text-lg font-mono">
+            npx husky-installer
+          </code>
+        </div>
+      </div>
     </div>
   );
 }

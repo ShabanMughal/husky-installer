@@ -1,2 +1,2 @@
-npx prettier --write . --ignore-path .gitignore > /dev/null 2>&1 && git add .
-npx eslint . --fix --ignore-pattern ".husky/*" > /dev/null 2>&1 && git add .
+npx prettier --write . --ignore-path .gitignore && git add .
+npx eslint . --fix --ignore-pattern "node_modules" --ignore-pattern ".husky" --ignore-pattern "dist" && git add .
