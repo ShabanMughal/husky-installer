@@ -14,6 +14,8 @@ export default defineConfig({
       ...mdx({
         remarkPlugins: [remarkGfm],
         rehypePlugins: [rehypeSlug, rehypeHighlight],
+        jsxImportSource: 'react',
+        providerImportSource: '@mdx-js/react',
       }),
     },
     react(),

@@ -1,8 +1,10 @@
 # Usage
 
+Husky Installer offers two ways to configure your git hooks: **CLI mode** and **Web interface**.
+
 ## CLI Mode
 
-Run the interactive CLI:
+Run the interactive CLI in your project directory:
 
 ```bash
 npx husky-installer
@@ -10,35 +12,66 @@ npx husky-installer
 
 The CLI will guide you through:
 
-1. Selecting commit message format (emoji or conventional)
-2. Choosing hooks to install (pre-commit, commit-msg)
-3. Configuring Prettier and ESLint
-4. Setting up Husky
+1. **Package Manager Detection** - Automatically detects npm, yarn, pnpm, or bun
+2. **Prettier Setup** - Choose whether to add code formatting
+3. **ESLint Configuration** - Optionally add linting rules
+4. **Commit Message Format** - Select emoji or conventional commit format
+5. **Husky Installation** - Automatically installs and configures Husky
+
+### Example CLI Flow
+
+```
+📦 Detected package manager: npm
+
+? Do you want to add Prettier (code formatting)?
+  ❯ Yes
+    No
+
+? Do you want to add ESLint (code linting)?
+  ❯ Yes
+    No
+
+? Enable automatic commit prefixes?
+  ❯ Yes
+    No
+
+✅ Installation complete!
+```
 
 ## Web Interface
 
-Start the web interface:
+Start the web interface for visual configuration:
 
 ```bash
 npm run dev
 ```
 
-Then open your browser to configure visually.
+Then open your browser to:
+
+- Configure hooks visually
+- Preview generated scripts
+- Copy configuration commands
 
 ## Available Hooks
 
+Husky Installer sets up two main hooks:
+
 ### Pre-commit Hook
 
-Runs before each commit to:
+Runs **before each commit** to ensure code quality:
 
-- Format code with Prettier
-- Lint code with ESLint
-- Run tests (optional)
+- ✅ **Format code** with Prettier
+- ✅ **Lint code** with ESLint
+- ✅ **Run tests** (optional, if configured)
+
+If any of these fail, the commit is blocked until issues are resolved.
 
 ### Commit Message Hook
 
-Validates commit messages to ensure they follow:
+Validates commit messages to ensure they follow your chosen format:
 
-- Conventional Commits format
-- Emoji commit format
-- Custom patterns
+- 📝 **Conventional Commits** - `feat:`, `fix:`, `docs:`, etc.
+- 🎨 **Emoji Commits** - Automatically adds emoji prefixes
+- ✨ **Custom Patterns** - Enforce your own commit message rules
+
+This ensures consistent commit history across your project.

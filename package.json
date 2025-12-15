@@ -27,12 +27,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ShabanMughal/husky-installer.git"
+    "url": "git+https://github.com/ShabanMughal/husky-installer.git"
   },
   "bugs": {
     "url": "https://github.com/ShabanMughal/husky-installer/issues"
   },
-  "homepage": "https://github.com/ShabanMughal/husky-installer#readme",
+  "homepage": "https://husky-installer.vercel.app/docs",
   "engines": {
     "node": ">=18.0.0"
   },

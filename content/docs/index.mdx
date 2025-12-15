@@ -1,26 +1,40 @@
 # Husky Installer
 
-Interactive CLI and web interface for setting up Husky git hooks with Prettier, ESLint, and commit conventions.
+**Interactive CLI and web interface** for setting up Husky git hooks with Prettier, ESLint, and commit conventions.
 
 ## Features
 
-- 🎯 Interactive CLI setup
-- 🎨 Web interface for configuration
-- 🔧 Automatic Husky installation
-- ✨ Prettier integration
-- 📝 ESLint configuration
-- 💬 Commit message conventions
+Husky Installer provides a seamless way to configure git hooks in your project:
+
+- 🎯 **Interactive CLI** - Beautiful terminal prompts with auto-detection
+- 🎨 **Web Interface** - Modern web UI for visual configuration
+- 🔧 **Automatic Setup** - Installs and configures Husky automatically
+- ✨ **Prettier Integration** - Auto-format code on commit
+- 📝 **ESLint Configuration** - Auto-fix linting issues
+- 💬 **Commit Conventions** - Enforce conventional commits with emoji support
 
 ## Getting Started
 
-Install the package globally or use npx:
+The easiest way to get started is using `npx` (no installation required):
 
 ```bash
 npx husky-installer
 ```
 
-Or install globally:
+This will guide you through an interactive setup process.
+
+### Global Installation
+
+Alternatively, you can install it globally:
 
 ```bash
 npm install -g husky-installer
 ```
+
+Then run it from any directory:
+
+```bash
+husky-installer
+```
+
+> **Note:** Make sure you have initialized a git repository (`git init`) before running the installer.

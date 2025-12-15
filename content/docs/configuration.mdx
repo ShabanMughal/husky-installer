@@ -1,12 +1,27 @@
 # Configuration
 
+All configuration files are automatically created by Husky Installer. You can customize them to fit your project's needs.
+
 ## Husky Configuration
 
-Husky hooks are stored in the `.husky` directory. You can customize them by editing the hook files.
+Husky hooks are stored in the `.husky` directory. Each hook is a shell script that runs at specific git events.
+
+### Hook Files
+
+- **`.husky/pre-commit`** - Runs before commits
+- **`.husky/commit-msg`** - Validates commit messages
+
+You can edit these files directly to customize behavior:
+
+```bash
+# Example: .husky/pre-commit
+npm run lint
+npm run format
+```
 
 ## Prettier Configuration
 
-Create a `.prettierrc` file in your project root:
+Prettier configuration is stored in `.prettierrc`. Here's a recommended setup:
 
 ```json
 {
@@ -14,13 +29,19 @@ Create a `.prettierrc` file in your project root:
   "trailingComma": "all",
   "singleQuote": true,
   "printWidth": 80,
-  "tabWidth": 2
+  "tabWidth": 2,
+  "arrowParens": "always",
+  "endOfLine": "lf"
 }
 ```
 
+### Customizing Prettier
+
+You can modify `.prettierrc` to match your team's style preferences. See the [Prettier documentation](https://prettier.io/docs/en/configuration.html) for all options.
+
 ## ESLint Configuration
 
-Create an `eslint.config.js` file:
+ESLint configuration is in `eslint.config.js`. Example configuration:
 
 ```javascript
 export default [
@@ -28,6 +49,25 @@ export default [
     rules: {
       'no-console': 'warn',
       'no-unused-vars': 'error',
+      'prefer-const': 'error',
+      'no-var': 'error',
+    },
+  },
+];
+```
+
+### Adding ESLint Rules
+
+Extend the configuration with your preferred rules or use a preset:
+
+```javascript
+import js from '@eslint/js';
+
+export default [
+  js.configs.recommended,
+  {
+    rules: {
+      // Your custom rules
     },
   },
 ];
@@ -35,7 +75,11 @@ export default [
 
 ## Commit Message Formats
 
+Husky Installer supports two commit message formats:
+
 ### Conventional Commits
+
+Follows the [Conventional Commits](https://www.conventionalcommits.org/) specification:
 
 ```
 type(scope): subject
@@ -45,19 +89,56 @@ body
 footer
 ```
 
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+**Common Types:**
+
+- `feat` - New feature
+- `fix` - Bug fix
+- `docs` - Documentation changes
+- `style` - Code style (formatting, missing semicolons, etc.)
+- `refactor` - Code refactoring
+- `test` - Adding or updating tests
+- `chore` - Maintenance tasks
+
+**Example:**
+
+```
+feat(auth): add login functionality
+
+Implements user authentication with JWT tokens.
+```
 
 ### Emoji Commits
 
+Automatically adds emoji prefixes to your commits:
+
 ```
-:emoji: subject
-
-body
+🚀 feat: add login functionality
+🐛 fix: resolve button click issue
+📝 docs: update installation guide
 ```
 
-Common emojis:
+**Common Emojis:**
 
-- ✨ `:sparkles:` - New feature
-- 🐛 `:bug:` - Bug fix
-- 📝 `:memo:` - Documentation
-- 🎨 `:art:` - Code style
+- 🚀 `feat` - New feature
+- 🐛 `fix` - Bug fix
+- 📝 `docs` - Documentation
+- 🎨 `style` - Code style
+- ♻️ `refactor` - Refactoring
+- ⚡ `perf` - Performance improvement
+- ✅ `test` - Tests
+- 🔧 `chore` - Maintenance
+
+## Customizing Hooks
+
+You can modify hook files in `.husky/` to add custom behavior:
+
+```bash
+# .husky/pre-commit
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run your custom scripts
+npm run custom-check
+npm run lint
+npm run format
+```

@@ -1,34 +1,46 @@
 # Installation
 
+Husky Installer can be used in multiple ways. Choose the method that best fits your workflow.
+
 ## Using npx (Recommended)
 
-The easiest way to use Husky Installer is with npx:
+The **recommended** way to use Husky Installer is with `npx`. This requires no installation:
 
 ```bash
 npx husky-installer
 ```
 
+This command will:
+
+1. Detect your package manager automatically
+2. Guide you through interactive setup
+3. Install and configure everything
+
 ## Global Installation
 
-Install globally to use the CLI anywhere:
+Install globally to use the CLI from any directory:
 
-```bash
-npm install -g husky-installer
-```
+<PackageManagerTabs
+  commands={{
+    npm: 'npm install -g husky-installer',
+    pnpm: 'pnpm add -g husky-installer',
+    yarn: 'yarn global add husky-installer',
+    bun: 'bun add -g husky-installer',
+  }}
+/>
 
-Then run:
+After installation, run:
 
 ```bash
 husky-installer
 ```
 
-## Using Bun
-
-```bash
-bun add -g husky-installer
-```
-
 ## Requirements
 
-- Node.js >= 18.0.0
-- Git repository initialized
+Before installing, ensure you have:
+
+- **Node.js** >= 18.0.0
+- **Git** repository initialized (`git init` must be run first)
+- A **package.json** file in your project
+
+> **Important:** The installer requires an initialized git repository. If you haven't run `git init` yet, do that first.
