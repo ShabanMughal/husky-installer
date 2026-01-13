@@ -2,6 +2,7 @@ import { RootProvider } from 'fumadocs-ui/provider/react-router';
 import { DocsLayout as FumadocsLayout } from 'fumadocs-ui/layouts/docs';
 import type { ReactNode } from 'react';
 import { Github } from 'lucide-react';
+import SearchDialog from '../components/SearchDialog';
 
 const docsTree = {
   name: 'Documentation',
@@ -34,6 +35,7 @@ export function DocsLayout({ children }: { children: ReactNode }) {
     <RootProvider
       search={{
         enabled: true,
+        SearchDialog,
       }}
     >
       <FumadocsLayout

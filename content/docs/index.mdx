@@ -17,9 +17,14 @@ Husky Installer provides a seamless way to configure git hooks in your project:
 
 The easiest way to get started is using `npx` (no installation required):
 
-```bash
-npx husky-installer
-```
+<PackageManagerTabs
+  commands={{
+    npm: 'npx husky-installer',
+    pnpm: 'pnpm dlx husky-installer',
+    yarn: 'yarn dlx husky-installer',
+    bun: 'bunx husky-installer',
+  }}
+/>
 
 This will guide you through an interactive setup process.
 
@@ -27,14 +32,24 @@ This will guide you through an interactive setup process.
 
 Alternatively, you can install it globally:
 
-```bash
-npm install -g husky-installer
-```
+<PackageManagerTabs
+  commands={{
+    npm: 'npm install -g husky-installer',
+    pnpm: 'pnpm add -g husky-installer',
+    yarn: 'yarn global add husky-installer',
+    bun: 'bun add -g husky-installer',
+  }}
+/>
 
 Then run it from any directory:
 
-```bash
-husky-installer
-```
+<PackageManagerTabs
+  commands={{
+    npm: 'husky-installer',
+    pnpm: 'husky-installer',
+    yarn: 'husky-installer',
+    bun: 'husky-installer',
+  }}
+/>
 
 > **Note:** Make sure you have initialized a git repository (`git init`) before running the installer.

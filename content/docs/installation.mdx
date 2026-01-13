@@ -6,9 +6,14 @@ Husky Installer can be used in multiple ways. Choose the method that best fits y
 
 The **recommended** way to use Husky Installer is with `npx`. This requires no installation:
 
-```bash
-npx husky-installer
-```
+<PackageManagerTabs
+  commands={{
+    npm: 'npx husky-installer',
+    pnpm: 'pnpm dlx husky-installer',
+    yarn: 'yarn dlx husky-installer',
+    bun: 'bunx husky-installer',
+  }}
+/>
 
 This command will:
 
@@ -31,9 +36,14 @@ Install globally to use the CLI from any directory:
 
 After installation, run:
 
-```bash
-husky-installer
-```
+<PackageManagerTabs
+  commands={{
+    npm: 'husky-installer',
+    pnpm: 'husky-installer',
+    yarn: 'husky-installer',
+    bun: 'husky-installer',
+  }}
+/>
 
 ## Requirements
 

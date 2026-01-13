@@ -6,9 +6,14 @@ Husky Installer offers two ways to configure your git hooks: **CLI mode** and **
 
 Run the interactive CLI in your project directory:
 
-```bash
-npx husky-installer
-```
+<PackageManagerTabs
+  commands={{
+    npm: 'npx husky-installer',
+    pnpm: 'pnpm dlx husky-installer',
+    yarn: 'yarn dlx husky-installer',
+    bun: 'bunx husky-installer',
+  }}
+/>
 
 The CLI will guide you through:
 

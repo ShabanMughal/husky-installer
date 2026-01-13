@@ -35,6 +35,22 @@ export function PackageManagerTabs({ commands }: PackageManagerTabsProps) {
 
   const currentCommand = commands[activeTab];
 
+  // Parse command for syntax highlighting
+  const highlightCommand = (cmd: string) => {
+    const parts = cmd.split(' ');
+    const manager = parts[0];
+    const rest = parts.slice(1).join(' ');
+
+    return (
+      <>
+        <span className="text-blue-400 dark:text-blue-300">{manager}</span>
+        {rest && (
+          <span className="text-green-400 dark:text-green-300"> {rest}</span>
+        )}
+      </>
+    );
+  };
+
   return (
     <div className="my-6 border border-border rounded-lg overflow-hidden">
       <div className="flex border-b border-border bg-muted/50">
@@ -44,17 +60,19 @@ export function PackageManagerTabs({ commands }: PackageManagerTabsProps) {
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-2 text-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? 'text-foreground border-b-2 border-primary bg-background'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'text-blue-400 dark:text-blue-300 border-b-2 border-blue-500 dark:border-blue-300 bg-background'
+                : ''
             }`}
           >
             {tab.label}
           </button>
         ))}
       </div>
-      <div className="relative bg-muted/30">
+      <div className="relative bg-muted/30 dark:bg-muted/20">
         <pre className="p-4 overflow-x-auto">
-          <code className="text-sm font-mono">{currentCommand}</code>
+          <span className="text-sm font-mono">
+            {highlightCommand(currentCommand)}
+          </span>
         </pre>
         <button
           onClick={() => copyToClipboard(currentCommand)}
