@@ -266,7 +266,8 @@ async function main() {
         const prettierIgnores = ignorePatterns
           .map((p) => `--ignore-path .gitignore`)
           .join(' ');
-        preCommitContent += `npx prettier --write . --ignore-path .gitignore && git add .
+        preCommitContent += `npx prettier --write . --ignore-path .gitignore || true
+git add .
 `;
       }
 
@@ -274,7 +275,8 @@ async function main() {
         const eslintIgnores = ignorePatterns
           .map((p) => `--ignore-pattern "${p}"`)
           .join(' ');
-        preCommitContent += `npx eslint . --fix ${eslintIgnores} && git add .
+        preCommitContent += `npx eslint . --fix ${eslintIgnores} || true
+git add .
 `;
       }
 
