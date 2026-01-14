@@ -1,4 +1,4 @@
-npx prettier --write . --ignore-path .gitignore || true
+npx prettier --write . || true
 git add .
 npx eslint . --fix --ignore-pattern "node_modules" --ignore-pattern ".husky" --ignore-pattern "dist" || true
 git add .
