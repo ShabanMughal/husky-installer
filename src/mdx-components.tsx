@@ -11,6 +11,7 @@ import {
 import { DocsCodeBlock } from './components/DocsCodeBlock';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -26,6 +27,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Accordion,
     Steps,
     Step,
+    Callout,
     ...components,
   };
 }

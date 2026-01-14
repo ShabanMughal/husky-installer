@@ -34,6 +34,7 @@ Husky hooks are stored in the `.husky` directory. Each hook is a shell script th
 You can edit these files directly to customize behavior:
 
 <DocsCodeBlock
+  title=".husky/pre-commit"
   lang="bash"
   code={`# Example: .husky/pre-commit
 npm run lint
@@ -45,6 +46,7 @@ npm run format`}
 Prettier configuration is stored in `.prettierrc`. Here's a recommended setup:
 
 <DocsCodeBlock
+  title=".prettierrc"
   lang="json"
   code={`{
   "semi": true,
@@ -66,6 +68,7 @@ You can modify `.prettierrc` to match your team's style preferences. See the [Pr
 ESLint configuration is in `eslint.config.js`. Example configuration:
 
 <DocsCodeBlock
+  title="eslint.config.js"
   lang="javascript"
   code={`export default [
   {
@@ -84,6 +87,7 @@ ESLint configuration is in `eslint.config.js`. Example configuration:
 Extend the configuration with your preferred rules or use a preset:
 
 <DocsCodeBlock
+  title="eslint.config.js - With Preset"
   lang="javascript"
   code={`import js from '@eslint/js';
 
@@ -263,6 +267,7 @@ Automatically adds emoji prefixes to your commits:
 You can modify hook files in `.husky/` to add custom behavior:
 
 <DocsCodeBlock
+  title=".husky/pre-commit"
   lang="bash"
   code={`# .husky/pre-commit
 #!/usr/bin/env sh

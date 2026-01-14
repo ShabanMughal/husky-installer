@@ -52,16 +52,16 @@ export function PackageManagerTabs({ commands }: PackageManagerTabsProps) {
   };
 
   return (
-    <div className="my-6 border border-border rounded-lg overflow-hidden">
-      <div className="flex border-b border-border bg-muted/50">
+    <div className="my-6 border border-border rounded-lg overflow-hidden bg-muted/30 dark:bg-muted/20">
+      <div className="flex border-b border-border ">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-2 text-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? 'text-blue-400 dark:text-blue-300 border-b-2 border-blue-500 dark:border-blue-300 bg-background'
-                : ''
+                ? 'text-blue-500 dark:text-blue-400 border-b-2 border-blue-500 dark:border-blue-400 bg-background'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
           >
             {tab.label}
@@ -76,7 +76,7 @@ export function PackageManagerTabs({ commands }: PackageManagerTabsProps) {
         </pre>
         <button
           onClick={() => copyToClipboard(currentCommand)}
-          className="absolute top-4 right-4 p-2 rounded-md hover:bg-muted transition-colors"
+          className="absolute top-4 right-4 p-2 rounded-md hover:bg-muted/20 transition-colors"
           aria-label="Copy code"
         >
           {copied ? (
