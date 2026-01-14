@@ -6,12 +6,31 @@ All configuration files are automatically created by Husky Installer. You can cu
 
 Husky hooks are stored in the `.husky` directory. Each hook is a shell script that runs at specific git events.
 
-### Hook Files
+<Accordions type="single">
+  <Accordion title="Hook Files">
+    <DocsTable>
+      <DocsTableHeader>
+        <DocsTableRow>
+          <DocsTableHead>File</DocsTableHead>
+          <DocsTableHead>Description</DocsTableHead>
+        </DocsTableRow>
+      </DocsTableHeader>
+      <DocsTableBody>
+        <DocsTableRow>
+          <DocsTableCell><code>.husky/pre-commit</code></DocsTableCell>
+          <DocsTableCell>Runs before commits</DocsTableCell>
+        </DocsTableRow>
+        <DocsTableRow>
+          <DocsTableCell><code>.husky/commit-msg</code></DocsTableCell>
+          <DocsTableCell>Validates commit messages</DocsTableCell>
+        </DocsTableRow>
+      </DocsTableBody>
+    </DocsTable>
 
-- **`.husky/pre-commit`** - Runs before commits
-- **`.husky/commit-msg`** - Validates commit messages
+    You can edit these files directly to customize behavior:
 
-You can edit these files directly to customize behavior:
+  </Accordion>
+</Accordions>
 
 ```bash
 # Example: .husky/pre-commit
@@ -91,13 +110,60 @@ footer
 
 **Common Types:**
 
-- `feat` - New feature
-- `fix` - Bug fix
-- `docs` - Documentation changes
-- `style` - Code style (formatting, missing semicolons, etc.)
-- `refactor` - Code refactoring
-- `test` - Adding or updating tests
-- `chore` - Maintenance tasks
+<DocsTable>
+  <DocsTableHeader>
+    <DocsTableRow>
+      <DocsTableHead>Type</DocsTableHead>
+      <DocsTableHead>Description</DocsTableHead>
+    </DocsTableRow>
+  </DocsTableHeader>
+  <DocsTableBody>
+    <DocsTableRow>
+      <DocsTableCell>
+        <code>feat</code>
+      </DocsTableCell>
+      <DocsTableCell>New feature</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>
+        <code>fix</code>
+      </DocsTableCell>
+      <DocsTableCell>Bug fix</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>
+        <code>docs</code>
+      </DocsTableCell>
+      <DocsTableCell>Documentation changes</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>
+        <code>style</code>
+      </DocsTableCell>
+      <DocsTableCell>
+        Code style (formatting, missing semicolons, etc.)
+      </DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>
+        <code>refactor</code>
+      </DocsTableCell>
+      <DocsTableCell>Code refactoring</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>
+        <code>test</code>
+      </DocsTableCell>
+      <DocsTableCell>Adding or updating tests</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>
+        <code>chore</code>
+      </DocsTableCell>
+      <DocsTableCell>Maintenance tasks</DocsTableCell>
+    </DocsTableRow>
+  </DocsTableBody>
+</DocsTable>
 
 **Example:**
 
@@ -119,14 +185,73 @@ Automatically adds emoji prefixes to your commits:
 
 **Common Emojis:**
 
-- 🚀 `feat` - New feature
-- 🐛 `fix` - Bug fix
-- 📝 `docs` - Documentation
-- 🎨 `style` - Code style
-- ♻️ `refactor` - Refactoring
-- ⚡ `perf` - Performance improvement
-- ✅ `test` - Tests
-- 🔧 `chore` - Maintenance
+<DocsTable>
+  <DocsTableHeader>
+    <DocsTableRow>
+      <DocsTableHead>Emoji</DocsTableHead>
+      <DocsTableHead>Type</DocsTableHead>
+      <DocsTableHead>Description</DocsTableHead>
+    </DocsTableRow>
+  </DocsTableHeader>
+  <DocsTableBody>
+    <DocsTableRow>
+      <DocsTableCell>🚀</DocsTableCell>
+      <DocsTableCell>
+        <code>feat</code>
+      </DocsTableCell>
+      <DocsTableCell>New feature</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>🐛</DocsTableCell>
+      <DocsTableCell>
+        <code>fix</code>
+      </DocsTableCell>
+      <DocsTableCell>Bug fix</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>📝</DocsTableCell>
+      <DocsTableCell>
+        <code>docs</code>
+      </DocsTableCell>
+      <DocsTableCell>Documentation</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>🎨</DocsTableCell>
+      <DocsTableCell>
+        <code>style</code>
+      </DocsTableCell>
+      <DocsTableCell>Code style</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>♻️</DocsTableCell>
+      <DocsTableCell>
+        <code>refactor</code>
+      </DocsTableCell>
+      <DocsTableCell>Refactoring</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>⚡</DocsTableCell>
+      <DocsTableCell>
+        <code>perf</code>
+      </DocsTableCell>
+      <DocsTableCell>Performance improvement</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>✅</DocsTableCell>
+      <DocsTableCell>
+        <code>test</code>
+      </DocsTableCell>
+      <DocsTableCell>Tests</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>🔧</DocsTableCell>
+      <DocsTableCell>
+        <code>chore</code>
+      </DocsTableCell>
+      <DocsTableCell>Maintenance</DocsTableCell>
+    </DocsTableRow>
+  </DocsTableBody>
+</DocsTable>
 
 ## Customizing Hooks
 

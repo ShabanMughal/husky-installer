@@ -17,9 +17,19 @@ The **recommended** way to use Husky Installer is with `npx`. This requires no i
 
 This command will:
 
-1. Detect your package manager automatically
-2. Guide you through interactive setup
-3. Install and configure everything
+<Steps>
+  <Step>
+    ### Detect Package Manager Automatically detects npm, yarn, pnpm, or bun in
+    your project.
+  </Step>
+  <Step>
+    ### Interactive Setup Guides you through the configuration process with
+    prompts.
+  </Step>
+  <Step>
+    ### Install & Configure Installs and configures everything automatically.
+  </Step>
+</Steps>
 
 ## Global Installation
 
@@ -49,8 +59,32 @@ After installation, run:
 
 Before installing, ensure you have:
 
-- **Node.js** >= 18.0.0
-- **Git** repository initialized (`git init` must be run first)
-- A **package.json** file in your project
+<DocsTable>
+  <DocsTableHeader>
+    <DocsTableRow>
+      <DocsTableHead>Requirement</DocsTableHead>
+      <DocsTableHead>Description</DocsTableHead>
+    </DocsTableRow>
+  </DocsTableHeader>
+  <DocsTableBody>
+    <DocsTableRow>
+      <DocsTableCell><strong>Node.js</strong></DocsTableCell>
+      <DocsTableCell>Version >= 18.0.0</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>Git Repository</strong></DocsTableCell>
+      <DocsTableCell>Initialized with <code>git init</code></DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>package.json</strong></DocsTableCell>
+      <DocsTableCell>Must exist in your project root</DocsTableCell>
+    </DocsTableRow>
+  </DocsTableBody>
+</DocsTable>
 
-> **Important:** The installer requires an initialized git repository. If you haven't run `git init` yet, do that first.
+<Accordions type="single" defaultValue="important-note">
+  <Accordion title="Important Note" id="important-note">
+    The installer requires an initialized git repository. If you haven't run{' '}
+    <code>git init</code> yet, do that first.
+  </Accordion>
+</Accordions>
