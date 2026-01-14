@@ -6,44 +6,47 @@ All configuration files are automatically created by Husky Installer. You can cu
 
 Husky hooks are stored in the `.husky` directory. Each hook is a shell script that runs at specific git events.
 
-<Accordions type="single">
-  <Accordion title="Hook Files">
-    <DocsTable>
-      <DocsTableHeader>
-        <DocsTableRow>
-          <DocsTableHead>File</DocsTableHead>
-          <DocsTableHead>Description</DocsTableHead>
-        </DocsTableRow>
-      </DocsTableHeader>
-      <DocsTableBody>
-        <DocsTableRow>
-          <DocsTableCell><code>.husky/pre-commit</code></DocsTableCell>
-          <DocsTableCell>Runs before commits</DocsTableCell>
-        </DocsTableRow>
-        <DocsTableRow>
-          <DocsTableCell><code>.husky/commit-msg</code></DocsTableCell>
-          <DocsTableCell>Validates commit messages</DocsTableCell>
-        </DocsTableRow>
-      </DocsTableBody>
-    </DocsTable>
+### Hook Files
 
-    You can edit these files directly to customize behavior:
+<DocsTable>
+  <DocsTableHeader>
+    <DocsTableRow>
+      <DocsTableHead>File</DocsTableHead>
+      <DocsTableHead>Description</DocsTableHead>
+    </DocsTableRow>
+  </DocsTableHeader>
+  <DocsTableBody>
+    <DocsTableRow>
+      <DocsTableCell>
+        <code>.husky/pre-commit</code>
+      </DocsTableCell>
+      <DocsTableCell>Runs before commits</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>
+        <code>.husky/commit-msg</code>
+      </DocsTableCell>
+      <DocsTableCell>Validates commit messages</DocsTableCell>
+    </DocsTableRow>
+  </DocsTableBody>
+</DocsTable>
 
-  </Accordion>
-</Accordions>
+You can edit these files directly to customize behavior:
 
-```bash
-# Example: .husky/pre-commit
+<DocsCodeBlock
+  lang="bash"
+  code={`# Example: .husky/pre-commit
 npm run lint
-npm run format
-```
+npm run format`}
+/>
 
 ## Prettier Configuration
 
 Prettier configuration is stored in `.prettierrc`. Here's a recommended setup:
 
-```json
-{
+<DocsCodeBlock
+  lang="json"
+  code={`{
   "semi": true,
   "trailingComma": "all",
   "singleQuote": true,
@@ -51,8 +54,8 @@ Prettier configuration is stored in `.prettierrc`. Here's a recommended setup:
   "tabWidth": 2,
   "arrowParens": "always",
   "endOfLine": "lf"
-}
-```
+}`}
+/>
 
 ### Customizing Prettier
 
@@ -62,8 +65,9 @@ You can modify `.prettierrc` to match your team's style preferences. See the [Pr
 
 ESLint configuration is in `eslint.config.js`. Example configuration:
 
-```javascript
-export default [
+<DocsCodeBlock
+  lang="javascript"
+  code={`export default [
   {
     rules: {
       'no-console': 'warn',
@@ -72,15 +76,16 @@ export default [
       'no-var': 'error',
     },
   },
-];
-```
+];`}
+/>
 
 ### Adding ESLint Rules
 
 Extend the configuration with your preferred rules or use a preset:
 
-```javascript
-import js from '@eslint/js';
+<DocsCodeBlock
+  lang="javascript"
+  code={`import js from '@eslint/js';
 
 export default [
   js.configs.recommended,
@@ -89,8 +94,8 @@ export default [
       // Your custom rules
     },
   },
-];
-```
+];`}
+/>
 
 ## Commit Message Formats
 
@@ -257,13 +262,15 @@ Automatically adds emoji prefixes to your commits:
 
 You can modify hook files in `.husky/` to add custom behavior:
 
-```bash
-# .husky/pre-commit
+<DocsCodeBlock
+  lang="bash"
+  code={`# .husky/pre-commit
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
 # Run your custom scripts
+
 npm run custom-check
 npm run lint
-npm run format
-```
+npm run format`}
+/>

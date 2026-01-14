@@ -8,6 +8,7 @@ import {
   DocsTableHead,
   DocsTableCell,
 } from './components/DocsTable';
+import { DocsCodeBlock } from './components/DocsCodeBlock';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
@@ -20,6 +21,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     DocsTableRow,
     DocsTableHead,
     DocsTableCell,
+    DocsCodeBlock,
     Accordions,
     Accordion,
     Steps,
