@@ -61,7 +61,12 @@ export function DocsLayout({ children }: { children: ReactNode }) {
       <FumadocsLayout
         tree={docsTree}
         nav={{
-          title: 'Husky Installer',
+          title: (
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🐕</span>
+              <span>Husky Installer</span>
+            </div>
+          ),
         }}
         sidebar={{
           footer: (
