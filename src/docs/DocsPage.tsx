@@ -54,6 +54,11 @@ export function DocsPage() {
   const contentRef = useRef<HTMLDivElement>(null);
   const mdxComponents = useMDXComponents({});
 
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [slug]);
+
   useEffect(() => {
     // Extract TOC after content is rendered with multiple attempts
     const extractWithRetry = (attempts = 0) => {
