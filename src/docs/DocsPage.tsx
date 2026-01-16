@@ -10,6 +10,10 @@ const docs = {
   installation: lazy(() => import('../../content/docs/installation.mdx')),
   usage: lazy(() => import('../../content/docs/usage.mdx')),
   configuration: lazy(() => import('../../content/docs/configuration.mdx')),
+  examples: lazy(() => import('../../content/docs/examples.mdx')),
+  advanced: lazy(() => import('../../content/docs/advanced.mdx')),
+  troubleshooting: lazy(() => import('../../content/docs/troubleshooting.mdx')),
+  faq: lazy(() => import('../../content/docs/faq.mdx')),
 };
 
 // Extract TOC from headings in the rendered content

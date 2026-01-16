@@ -1,0 +1,328 @@
+# Examples
+
+Real-world examples and use cases for Husky Installer.
+
+## Basic Setup
+
+The simplest setup with Prettier and ESLint:
+
+<Steps>
+  <Step>
+    ### Run Installer
+    
+    Start the interactive CLI in your project.
+  </Step>
+  <Step>
+    ### Select Options
+    
+    Choose Prettier and ESLint when prompted.
+  </Step>
+  <Step>
+    ### Choose Commit Format
+    
+    Select conventional commits or emoji format.
+  </Step>
+</Steps>
+
+<DocsCodeBlock
+  title="Terminal Output"
+  lang="text"
+  code={`$ npx husky-installer
+
+📦 Detected package manager: npm
+
+? Do you want to add Prettier (code formatting)? Yes
+? Do you want to add ESLint (code linting)? Yes
+? Enable automatic commit prefixes? Yes
+
+✅ Installing dependencies...
+✅ Configuring Husky...
+✅ Setting up pre-commit hook...
+✅ Setting up commit-msg hook...
+
+🎉 Installation complete!`}
+/>
+
+## React Project
+
+Example setup for a React project with TypeScript:
+
+<DocsCodeBlock
+  title=".prettierrc"
+  lang="json"
+  code={`{
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "jsxSingleQuote": false,
+  "arrowParens": "always"
+}`}
+/>
+
+<DocsCodeBlock
+  title="eslint.config.js"
+  lang="javascript"
+  code={`import js from '@eslint/js';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+
+export default [
+  js.configs.recommended,
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+    },
+  },
+];`}
+/>
+
+## Node.js API Project
+
+Example setup for a Node.js backend project:
+
+<DocsCodeBlock
+  title=".prettierrc"
+  lang="json"
+  code={`{
+  "semi": true,
+  "trailingComma": "all",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2
+}`}
+/>
+
+<DocsCodeBlock
+  title="eslint.config.js"
+  lang="javascript"
+  code={`import js from '@eslint/js';
+
+export default [
+  js.configs.recommended,
+  {
+    rules: {
+      'no-console': 'off',
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'prefer-const': 'error',
+      'no-var': 'error',
+    },
+  },
+];`}
+/>
+
+## Monorepo Setup
+
+For projects with multiple packages:
+
+<DocsCodeBlock
+  title=".husky/pre-commit"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run checks in all packages
+npm run lint --workspaces
+npm run format --workspaces
+npm run test --workspaces`}
+/>
+
+<DocsCodeBlock
+  title="package.json (root)"
+  lang="json"
+  code={`{
+  "name": "my-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "jest"
+  }
+}`}
+/>
+
+## Custom Pre-commit Hook
+
+Advanced pre-commit hook with multiple checks:
+
+<DocsCodeBlock
+  title=".husky/pre-commit"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Type checking
+echo "📘 Type checking..."
+npm run type-check || exit 1
+
+# Linting
+echo "🔧 Linting..."
+npm run lint || exit 1
+
+# Formatting
+echo "✨ Formatting..."
+npm run format || exit 1
+
+# Unit tests
+echo "🧪 Running tests..."
+npm run test:unit || exit 1
+
+echo "✅ All checks passed!"`}
+/>
+
+## Commit Message Templates
+
+### Conventional Commits
+
+<DocsTable>
+  <DocsTableHeader>
+    <DocsTableRow>
+      <DocsTableHead>Type</DocsTableHead>
+      <DocsTableHead>Example</DocsTableHead>
+      <DocsTableHead>When to Use</DocsTableHead>
+    </DocsTableRow>
+  </DocsTableHeader>
+  <DocsTableBody>
+    <DocsTableRow>
+      <DocsTableCell><code>feat</code></DocsTableCell>
+      <DocsTableCell>feat(auth): add OAuth login</DocsTableCell>
+      <DocsTableCell>New features</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><code>fix</code></DocsTableCell>
+      <DocsTableCell>fix(api): handle null response</DocsTableCell>
+      <DocsTableCell>Bug fixes</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><code>docs</code></DocsTableCell>
+      <DocsTableCell>docs: update installation guide</DocsTableCell>
+      <DocsTableCell>Documentation only</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><code>style</code></DocsTableCell>
+      <DocsTableCell>style: format code with prettier</DocsTableCell>
+      <DocsTableCell>Code style changes</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><code>refactor</code></DocsTableCell>
+      <DocsTableCell>refactor(db): optimize queries</DocsTableCell>
+      <DocsTableCell>Code refactoring</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><code>test</code></DocsTableCell>
+      <DocsTableCell>test: add user service tests</DocsTableCell>
+      <DocsTableCell>Adding tests</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><code>chore</code></DocsTableCell>
+      <DocsTableCell>chore: update dependencies</DocsTableCell>
+      <DocsTableCell>Maintenance tasks</DocsTableCell>
+    </DocsTableRow>
+  </DocsTableBody>
+</DocsTable>
+
+### Emoji Commits
+
+<DocsTable>
+  <DocsTableHeader>
+    <DocsTableRow>
+      <DocsTableHead>Emoji</DocsTableHead>
+      <DocsTableHead>Example</DocsTableHead>
+      <DocsTableHead>When to Use</DocsTableHead>
+    </DocsTableRow>
+  </DocsTableHeader>
+  <DocsTableBody>
+    <DocsTableRow>
+      <DocsTableCell>🚀</DocsTableCell>
+      <DocsTableCell>🚀 feat: add OAuth login</DocsTableCell>
+      <DocsTableCell>New features</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>🐛</DocsTableCell>
+      <DocsTableCell>🐛 fix: handle null response</DocsTableCell>
+      <DocsTableCell>Bug fixes</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>📝</DocsTableCell>
+      <DocsTableCell>📝 docs: update installation guide</DocsTableCell>
+      <DocsTableCell>Documentation</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>💄</DocsTableCell>
+      <DocsTableCell>💄 style: update button styles</DocsTableCell>
+      <DocsTableCell>UI/styling changes</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>♻️</DocsTableCell>
+      <DocsTableCell>♻️ refactor: optimize queries</DocsTableCell>
+      <DocsTableCell>Refactoring</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>✅</DocsTableCell>
+      <DocsTableCell>✅ test: add user service tests</DocsTableCell>
+      <DocsTableCell>Tests</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell>🔧</DocsTableCell>
+      <DocsTableCell>🔧 chore: update dependencies</DocsTableCell>
+      <DocsTableCell>Configuration</DocsTableCell>
+    </DocsTableRow>
+  </DocsTableBody>
+</DocsTable>
+
+## CI/CD Integration
+
+Example GitHub Actions workflow with Husky:
+
+<DocsCodeBlock
+  title=".github/workflows/ci.yml"
+  lang="yaml"
+  code={`name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run linter
+        run: npm run lint
+        
+      - name: Check formatting
+        run: npm run format:check
+        
+      - name: Run tests
+        run: npm test`}
+/>
+
+<Callout type="info" title="Note">
+Husky hooks only run locally. In CI/CD, you need to run the checks explicitly as shown above.
+</Callout>

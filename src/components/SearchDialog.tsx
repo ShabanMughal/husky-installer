@@ -55,6 +55,26 @@ const docsTree: TreeNode = {
       name: 'Configuration',
       url: '/docs/configuration',
     },
+    {
+      type: 'page' as const,
+      name: 'Examples',
+      url: '/docs/examples',
+    },
+    {
+      type: 'page' as const,
+      name: 'Advanced',
+      url: '/docs/advanced',
+    },
+    {
+      type: 'page' as const,
+      name: 'Troubleshooting',
+      url: '/docs/troubleshooting',
+    },
+    {
+      type: 'page' as const,
+      name: 'FAQ',
+      url: '/docs/faq',
+    },
   ],
 };
 

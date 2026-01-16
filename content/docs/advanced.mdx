@@ -1,0 +1,400 @@
+# Advanced Usage
+
+Advanced configurations and customizations for power users.
+
+## Custom Hook Scripts
+
+### Pre-push Hook
+
+Run tests and build before pushing to remote:
+
+<DocsCodeBlock
+  title=".husky/pre-push"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🧪 Running tests before push..."
+npm run test || exit 1
+
+echo "🏗️ Building project..."
+npm run build || exit 1
+
+echo "✅ All checks passed! Pushing..."`}
+/>
+
+### Post-merge Hook
+
+Automatically install dependencies after pulling changes:
+
+<DocsCodeBlock
+  title=".husky/post-merge"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check if package.json or lock file changed
+changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+
+check_run() {
+  echo "$changed_files" | grep --quiet "$1" && eval "$2"
+}
+
+# Install dependencies if package files changed
+check_run "package.json\\|package-lock.json\\|yarn.lock\\|pnpm-lock.yaml" "echo '📦 Dependencies changed, installing...' && npm install"`}
+/>
+
+### Prepare-commit-msg Hook
+
+Automatically add branch name to commit messages:
+
+<DocsCodeBlock
+  title=".husky/prepare-commit-msg"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+# Only add branch name for regular commits (not merge, squash, etc.)
+if [ -z "$COMMIT_SOURCE" ]; then
+  BRANCH_NAME=$(git symbolic-ref --short HEAD 2>/dev/null)
+  
+  # Extract ticket number from branch name (e.g., feature/PROJ-123-description)
+  TICKET=$(echo "$BRANCH_NAME" | grep -o '[A-Z]\+-[0-9]\+')
+  
+  if [ -n "$TICKET" ]; then
+    # Prepend ticket number to commit message
+    sed -i.bak -e "1s/^/[$TICKET] /" "$COMMIT_MSG_FILE"
+    rm "$COMMIT_MSG_FILE.bak"
+  fi
+fi`}
+/>
+
+## Lint-staged Integration
+
+Only run checks on staged files for better performance:
+
+<Steps>
+  <Step>
+    ### Install lint-staged
+    
+    Add lint-staged to your project.
+  </Step>
+  <Step>
+    ### Configure lint-staged
+    
+    Create configuration in package.json.
+  </Step>
+  <Step>
+    ### Update pre-commit hook
+    
+    Use lint-staged in your hook.
+  </Step>
+</Steps>
+
+<DocsCodeBlock
+  title="Install lint-staged"
+  lang="bash"
+  code={`npm install --save-dev lint-staged`}
+/>
+
+<DocsCodeBlock
+  title="package.json"
+  lang="json"
+  code={`{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}`}
+/>
+
+<DocsCodeBlock
+  title=".husky/pre-commit"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged`}
+/>
+
+## Commitlint Integration
+
+Enforce commit message conventions with commitlint:
+
+<DocsCodeBlock
+  title="Install commitlint"
+  lang="bash"
+  code={`npm install --save-dev @commitlint/cli @commitlint/config-conventional`}
+/>
+
+<DocsCodeBlock
+  title="commitlint.config.js"
+  lang="javascript"
+  code={`export default {
+  extends: ['@commitlint/config-conventional'],
+  rules: {
+    'type-enum': [
+      2,
+      'always',
+      [
+        'feat',
+        'fix',
+        'docs',
+        'style',
+        'refactor',
+        'perf',
+        'test',
+        'chore',
+        'revert',
+      ],
+    ],
+    'subject-case': [2, 'never', ['upper-case']],
+    'subject-empty': [2, 'never'],
+    'subject-full-stop': [2, 'never', '.'],
+    'header-max-length': [2, 'always', 100],
+  },
+};`}
+/>
+
+<DocsCodeBlock
+  title=".husky/commit-msg"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx --no -- commitlint --edit $1`}
+/>
+
+## Environment-specific Hooks
+
+Skip hooks in CI or specific environments:
+
+<DocsCodeBlock
+  title=".husky/pre-commit"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Skip hooks in CI environment
+if [ -n "$CI" ]; then
+  echo "⏭️ Skipping pre-commit hook in CI"
+  exit 0
+fi
+
+# Skip hooks if SKIP_HOOKS is set
+if [ -n "$SKIP_HOOKS" ]; then
+  echo "⏭️ Skipping pre-commit hook (SKIP_HOOKS is set)"
+  exit 0
+fi
+
+# Run checks
+npm run lint
+npm run format`}
+/>
+
+Usage:
+```bash
+# Skip hooks for one command
+SKIP_HOOKS=1 git commit -m "message"
+
+# Skip hooks for current session
+export SKIP_HOOKS=1
+git commit -m "message"
+```
+
+## Parallel Execution
+
+Run multiple checks in parallel for better performance:
+
+<DocsCodeBlock
+  title=".husky/pre-commit"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running checks in parallel..."
+
+# Run checks in background
+npm run lint &
+LINT_PID=$!
+
+npm run format &
+FORMAT_PID=$!
+
+npm run type-check &
+TYPE_PID=$!
+
+# Wait for all processes and check exit codes
+FAIL=0
+
+wait $LINT_PID || FAIL=1
+wait $FORMAT_PID || FAIL=1
+wait $TYPE_PID || FAIL=1
+
+if [ $FAIL -eq 1 ]; then
+  echo "❌ Some checks failed"
+  exit 1
+fi
+
+echo "✅ All checks passed"`}
+/>
+
+## Custom Commit Message Validation
+
+Create your own commit message rules:
+
+<DocsCodeBlock
+  title=".husky/commit-msg"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Check minimum length
+if [ \${#COMMIT_MSG} -lt 10 ]; then
+  echo "❌ Commit message too short (minimum 10 characters)"
+  exit 1
+fi
+
+# Check for ticket number (e.g., PROJ-123)
+if ! echo "$COMMIT_MSG" | grep -qE '\\[?[A-Z]+-[0-9]+\\]?'; then
+  echo "❌ Commit message must include ticket number (e.g., [PROJ-123])"
+  exit 1
+fi
+
+# Check for prohibited words
+if echo "$COMMIT_MSG" | grep -qiE '(WIP|TODO|FIXME|XXX)'; then
+  echo "❌ Commit message contains prohibited words (WIP, TODO, FIXME, XXX)"
+  exit 1
+fi
+
+echo "✅ Commit message validated"`}
+/>
+
+## Monorepo Configuration
+
+Configure hooks for monorepo with multiple packages:
+
+<DocsCodeBlock
+  title=".husky/pre-commit"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Get list of changed packages
+CHANGED_PACKAGES=$(git diff --cached --name-only | grep '^packages/' | cut -d'/' -f2 | sort -u)
+
+if [ -z "$CHANGED_PACKAGES" ]; then
+  echo "No package changes detected"
+  exit 0
+fi
+
+echo "📦 Changed packages: $CHANGED_PACKAGES"
+
+# Run checks for each changed package
+for package in $CHANGED_PACKAGES; do
+  echo "Checking packages/$package..."
+  
+  cd "packages/$package" || exit 1
+  
+  npm run lint || exit 1
+  npm run test || exit 1
+  
+  cd ../.. || exit 1
+done
+
+echo "✅ All package checks passed"`}
+/>
+
+## Conditional Checks
+
+Run different checks based on file types:
+
+<DocsCodeBlock
+  title=".husky/pre-commit"
+  lang="bash"
+  code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Get staged files
+STAGED_FILES=$(git diff --cached --name-only)
+
+# Check if any JS/TS files changed
+if echo "$STAGED_FILES" | grep -qE '\\.(js|jsx|ts|tsx)$'; then
+  echo "🔧 Running ESLint on JS/TS files..."
+  npm run lint || exit 1
+fi
+
+# Check if any CSS files changed
+if echo "$STAGED_FILES" | grep -qE '\\.(css|scss|sass)$'; then
+  echo "🎨 Running Stylelint on CSS files..."
+  npm run stylelint || exit 1
+fi
+
+# Check if any markdown files changed
+if echo "$STAGED_FILES" | grep -qE '\\.md$'; then
+  echo "📝 Checking markdown files..."
+  npm run markdown-lint || exit 1
+fi
+
+# Check if package.json changed
+if echo "$STAGED_FILES" | grep -q 'package.json'; then
+  echo "📦 Validating package.json..."
+  npm run validate-package || exit 1
+fi
+
+echo "✅ All checks passed"`}
+/>
+
+## Performance Optimization
+
+<DocsTable>
+  <DocsTableHeader>
+    <DocsTableRow>
+      <DocsTableHead>Optimization</DocsTableHead>
+      <DocsTableHead>Description</DocsTableHead>
+      <DocsTableHead>Impact</DocsTableHead>
+    </DocsTableRow>
+  </DocsTableHeader>
+  <DocsTableBody>
+    <DocsTableRow>
+      <DocsTableCell><strong>Use lint-staged</strong></DocsTableCell>
+      <DocsTableCell>Only check staged files instead of entire project</DocsTableCell>
+      <DocsTableCell>High - 5-10x faster</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>Parallel execution</strong></DocsTableCell>
+      <DocsTableCell>Run multiple checks simultaneously</DocsTableCell>
+      <DocsTableCell>Medium - 2-3x faster</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>Skip tests in pre-commit</strong></DocsTableCell>
+      <DocsTableCell>Move tests to pre-push or CI</DocsTableCell>
+      <DocsTableCell>High - Much faster commits</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>Cache ESLint results</strong></DocsTableCell>
+      <DocsTableCell>Use <code>--cache</code> flag with ESLint</DocsTableCell>
+      <DocsTableCell>Medium - 30-50% faster</DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>Conditional checks</strong></DocsTableCell>
+      <DocsTableCell>Only run checks for changed file types</DocsTableCell>
+      <DocsTableCell>Medium - Varies by change</DocsTableCell>
+    </DocsTableRow>
+  </DocsTableBody>
+</DocsTable>
+
+<Callout type="info" title="Tip">
+Start with lint-staged for the biggest performance improvement. It's the easiest optimization with the highest impact.
+</Callout>

@@ -1,0 +1,220 @@
+# FAQ
+
+Frequently asked questions about Husky Installer.
+
+## General Questions
+
+<Accordions type="single">
+  <Accordion title="What is Husky Installer?">
+    Husky Installer is an interactive CLI and web interface that simplifies the setup of Husky git hooks in your project. It automatically configures Prettier, ESLint, and commit message conventions with just a few prompts.
+  </Accordion>
+
+  <Accordion title="Do I need to install Husky separately?">
+    No! Husky Installer automatically installs and configures Husky for you. You just need to run the installer and answer a few questions.
+  </Accordion>
+
+  <Accordion title="Can I use this with an existing project?">
+    Yes! Husky Installer works with both new and existing projects. It will detect your current setup and configure hooks accordingly.
+  </Accordion>
+
+  <Accordion title="Which package managers are supported?">
+    Husky Installer supports:
+    - npm
+    - pnpm
+    - yarn
+    - bun
+    
+    The installer automatically detects which package manager you're using.
+  </Accordion>
+
+  <Accordion title="Is this free to use?">
+    Yes! Husky Installer is completely free and open source under the MIT license.
+  </Accordion>
+</Accordions>
+
+## Technical Questions
+
+<Accordions type="single">
+  <Accordion title="What Node.js version do I need?">
+    Husky Installer requires Node.js version 18.0.0 or higher. Check your version with:
+    
+    ```bash
+    node --version
+    ```
+  </Accordion>
+
+  <Accordion title="Can I customize the generated hooks?">
+    Absolutely! After installation, you can edit the hook files in the `.husky` directory to add or remove checks. The files are simple shell scripts.
+  </Accordion>
+
+  <Accordion title="Will this slow down my commits?">
+    The pre-commit hook runs checks before each commit, which adds some time. However, this ensures code quality and prevents issues from being committed. You can optimize performance by:
+    
+    - Using lint-staged to only check changed files
+    - Removing unnecessary checks
+    - Running tests in CI instead of pre-commit
+  </Accordion>
+
+  <Accordion title="Can I skip hooks temporarily?">
+    Yes, you can bypass hooks for a single commit using:
+    
+    ```bash
+    git commit --no-verify -m "message"
+    ```
+    
+    However, this should only be used in emergencies as it bypasses all quality checks.
+  </Accordion>
+
+  <Accordion title="Does this work with TypeScript?">
+    Yes! Husky Installer works perfectly with TypeScript projects. You can add type checking to your pre-commit hook:
+    
+    <DocsCodeBlock
+      title=".husky/pre-commit"
+      lang="bash"
+      code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm run type-check
+npm run lint
+npm run format`}
+    />
+  </Accordion>
+</Accordions>
+
+## Configuration Questions
+
+<Accordions type="single">
+  <Accordion title="How do I change the commit message format?">
+    Edit the `.husky/commit-msg` file to modify the commit message validation. You can switch between conventional commits, emoji commits, or create your own custom format.
+  </Accordion>
+
+  <Accordion title="Can I use both Prettier and ESLint?">
+    Yes! They work together well. Prettier handles code formatting while ESLint handles code quality rules. Make sure to configure them properly to avoid conflicts.
+  </Accordion>
+
+  <Accordion title="How do I add more hooks?">
+    You can add additional hooks by creating new files in the `.husky` directory. Common hooks include:
+    
+    - `pre-push` - Runs before pushing to remote
+    - `post-merge` - Runs after merging branches
+    - `post-checkout` - Runs after checking out a branch
+    
+    Example:
+    
+    <DocsCodeBlock
+      title=".husky/pre-push"
+      lang="bash"
+      code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm run test
+npm run build`}
+    />
+  </Accordion>
+
+  <Accordion title="Can I disable specific checks?">
+    Yes! Edit the hook files in `.husky` and remove or comment out the checks you don't want. For example, to disable Prettier:
+    
+    <DocsCodeBlock
+      title=".husky/pre-commit"
+      lang="bash"
+      code={`#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# npm run format  # Disabled
+npm run lint`}
+    />
+  </Accordion>
+</Accordions>
+
+## Troubleshooting Questions
+
+<Accordions type="single">
+  <Accordion title="Why aren't my hooks running?">
+    Common reasons:
+    
+    1. **Hooks not executable** - Run `chmod +x .husky/*`
+    2. **Git hooks path not set** - Run `git config core.hooksPath .husky`
+    3. **Husky not installed** - Run `npm install husky --save-dev`
+    4. **Not in a git repository** - Run `git init`
+  </Accordion>
+
+  <Accordion title="I'm getting Prettier/ESLint errors on commit">
+    This is expected behavior! The hooks are preventing you from committing code that doesn't meet your quality standards. To fix:
+    
+    1. **Auto-fix issues:**
+       ```bash
+       npm run format
+       npm run lint -- --fix
+       ```
+    
+    2. **Review and fix manually** if auto-fix doesn't work
+    
+    3. **Adjust rules** in `.prettierrc` or `eslint.config.js` if they're too strict
+  </Accordion>
+
+  <Accordion title="Can I uninstall Husky Installer?">
+    Husky Installer is just a setup tool. After installation, you can uninstall it:
+    
+    ```bash
+    npm uninstall -g husky-installer
+    ```
+    
+    The hooks will continue to work because they're part of your project now. To remove hooks entirely:
+    
+    ```bash
+    npm uninstall husky
+    rm -rf .husky
+    git config --unset core.hooksPath
+    ```
+  </Accordion>
+
+  <Accordion title="Does this work on Windows?">
+    Yes! Husky Installer works on Windows, macOS, and Linux. However, on Windows, you may need to use Git Bash or WSL for the best experience.
+  </Accordion>
+</Accordions>
+
+## Best Practices
+
+<Accordions type="single">
+  <Accordion title="What should I include in pre-commit hooks?">
+    Recommended checks for pre-commit:
+    
+    - ✅ Code formatting (Prettier)
+    - ✅ Linting (ESLint)
+    - ✅ Type checking (TypeScript)
+    - ⚠️ Unit tests (only fast ones)
+    - ❌ Integration tests (too slow, run in CI)
+    - ❌ Build process (too slow, run in CI)
+  </Accordion>
+
+  <Accordion title="Should I commit the .husky directory?">
+    Yes! The `.husky` directory should be committed to your repository so that all team members have the same hooks configured.
+  </Accordion>
+
+  <Accordion title="How do I share this setup with my team?">
+    Once you've set up Husky Installer:
+    
+    1. Commit the `.husky` directory
+    2. Commit configuration files (`.prettierrc`, `eslint.config.js`)
+    3. Add a `prepare` script to `package.json`:
+       ```json
+       {
+         "scripts": {
+           "prepare": "husky"
+         }
+       }
+       ```
+    4. Team members just need to run `npm install` and hooks will be set up automatically
+  </Accordion>
+</Accordions>
+
+## Still Have Questions?
+
+<Callout type="info" title="Need Help?">
+If you couldn't find an answer to your question, please:
+
+- Check the [Troubleshooting](/docs/troubleshooting) page
+- Visit our [GitHub Issues](https://github.com/ShabanMughal/husky-installer/issues)
+- Read the [Husky documentation](https://typicode.github.io/husky/)
+</Callout>

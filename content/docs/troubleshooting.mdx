@@ -1,0 +1,232 @@
+# Troubleshooting
+
+Common issues and solutions when using Husky Installer.
+
+## Installation Issues
+
+### Git Repository Not Initialized
+
+<Callout type="error" title="Error">
+fatal: not a git repository (or any of the parent directories): .git
+</Callout>
+
+**Solution:** Initialize a git repository before running the installer:
+
+<PackageManagerTabs
+  commands={{
+    npm: 'git init',
+    pnpm: 'git init',
+    yarn: 'git init',
+    bun: 'git init',
+  }}
+/>
+
+### Node.js Version Too Old
+
+<Callout type="error" title="Error">
+Error: Husky Installer requires Node.js >= 18.0.0
+</Callout>
+
+**Solution:** Update Node.js to version 18 or higher. Check your current version:
+
+```bash
+node --version
+```
+
+### Package Manager Not Detected
+
+If the installer fails to detect your package manager:
+
+<Steps>
+  <Step>
+    ### Check package.json
+    
+    Ensure `package.json` exists in your project root.
+  </Step>
+  <Step>
+    ### Check Lock Files
+    
+    Verify you have a lock file (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, or `bun.lockb`).
+  </Step>
+  <Step>
+    ### Manual Installation
+    
+    Install dependencies manually first, then run the installer.
+  </Step>
+</Steps>
+
+## Hook Execution Issues
+
+### Hooks Not Running
+
+If git hooks aren't executing:
+
+<DocsTable>
+  <DocsTableHeader>
+    <DocsTableRow>
+      <DocsTableHead>Issue</DocsTableHead>
+      <DocsTableHead>Solution</DocsTableHead>
+    </DocsTableRow>
+  </DocsTableHeader>
+  <DocsTableBody>
+    <DocsTableRow>
+      <DocsTableCell><strong>Hooks not executable</strong></DocsTableCell>
+      <DocsTableCell>Run <code>chmod +x .husky/*</code></DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>Husky not installed</strong></DocsTableCell>
+      <DocsTableCell>Run <code>npm install husky --save-dev</code></DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>Git hooks path incorrect</strong></DocsTableCell>
+      <DocsTableCell>Run <code>git config core.hooksPath .husky</code></DocsTableCell>
+    </DocsTableRow>
+  </DocsTableBody>
+</DocsTable>
+
+### Prettier or ESLint Errors
+
+If you're getting formatting or linting errors:
+
+<Accordions type="single">
+  <Accordion title="Prettier Errors">
+    **Check Configuration:**
+    
+    Ensure `.prettierrc` exists and is valid JSON.
+    
+    **Fix All Files:**
+    
+    ```bash
+    npx prettier --write .
+    ```
+    
+    **Ignore Specific Files:**
+    
+    Add patterns to `.prettierignore`:
+    
+    ```
+    node_modules
+    dist
+    build
+    ```
+  </Accordion>
+
+  <Accordion title="ESLint Errors">
+    **Check Configuration:**
+    
+    Ensure `eslint.config.js` exists and is valid.
+    
+    **Fix All Files:**
+    
+    ```bash
+    npx eslint . --fix
+    ```
+    
+    **Disable Specific Rules:**
+    
+    Add to your ESLint config:
+    
+    <DocsCodeBlock
+      title="eslint.config.js"
+      lang="javascript"
+      code={`export default [
+  {
+    rules: {
+      'no-console': 'off', // Disable specific rule
+    },
+  },
+];`}
+    />
+  </Accordion>
+</Accordions>
+
+## Commit Message Issues
+
+### Commit Message Rejected
+
+<Callout type="error" title="Error">
+Commit message does not follow the required format
+</Callout>
+
+**Solution:** Follow the configured commit message format:
+
+**Conventional Commits:**
+```
+feat: add new feature
+fix: resolve bug
+docs: update documentation
+```
+
+**Emoji Commits:**
+```
+🚀 feat: add new feature
+🐛 fix: resolve bug
+📝 docs: update documentation
+```
+
+### Bypass Hooks (Emergency Only)
+
+<Callout type="warn" title="Warning">
+Only use this in emergencies. It bypasses all quality checks.
+</Callout>
+
+To skip hooks for a single commit:
+
+```bash
+git commit --no-verify -m "emergency fix"
+```
+
+## Performance Issues
+
+### Slow Pre-commit Hook
+
+If the pre-commit hook is taking too long:
+
+<Steps>
+  <Step>
+    ### Limit File Scope
+    
+    Use lint-staged to only check staged files instead of the entire project.
+  </Step>
+  <Step>
+    ### Disable Unnecessary Checks
+    
+    Remove checks you don't need from `.husky/pre-commit`.
+  </Step>
+  <Step>
+    ### Optimize ESLint
+    
+    Add `.eslintignore` to skip large directories.
+  </Step>
+</Steps>
+
+## Getting Help
+
+If you're still experiencing issues:
+
+<DocsTable>
+  <DocsTableHeader>
+    <DocsTableRow>
+      <DocsTableHead>Resource</DocsTableHead>
+      <DocsTableHead>Link</DocsTableHead>
+    </DocsTableRow>
+  </DocsTableHeader>
+  <DocsTableBody>
+    <DocsTableRow>
+      <DocsTableCell><strong>GitHub Issues</strong></DocsTableCell>
+      <DocsTableCell><a href="https://github.com/ShabanMughal/husky-installer/issues">Report a bug</a></DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>Husky Documentation</strong></DocsTableCell>
+      <DocsTableCell><a href="https://typicode.github.io/husky/">Official Husky docs</a></DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>Prettier Documentation</strong></DocsTableCell>
+      <DocsTableCell><a href="https://prettier.io/docs/">Prettier docs</a></DocsTableCell>
+    </DocsTableRow>
+    <DocsTableRow>
+      <DocsTableCell><strong>ESLint Documentation</strong></DocsTableCell>
+      <DocsTableCell><a href="https://eslint.org/docs/">ESLint docs</a></DocsTableCell>
+    </DocsTableRow>
+  </DocsTableBody>
+</DocsTable>
