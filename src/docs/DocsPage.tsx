@@ -103,7 +103,12 @@ export function DocsPage() {
 
   return (
     <DocsLayout>
-      <FumadocsPage toc={toc}>
+      <FumadocsPage
+        toc={toc}
+        tableOfContent={{
+          style: 'clerk',
+        }}
+      >
         <DocsBody>
           <Suspense fallback={<div className="p-8">Loading...</div>}>
             <MDXProvider components={mdxComponents}>
