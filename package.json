@@ -1,10 +1,10 @@
 {
   "name": "husky-installer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Interactive CLI and web interface for setting up Husky git hooks with Prettier, ESLint, and commit conventions",
   "type": "module",
   "bin": {
-    "husky-installer": "./bin/husky-installer.js"
+    "husky-installer": "bin/husky-installer.js"
   },
   "main": "./bin/husky-installer.js",
   "files": [
