@@ -1,375 +1,387 @@
 #!/usr/bin/env node
-
-import { select } from '@inquirer/prompts';
-import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import chalk from 'chalk';
-
-// Get package version dynamically
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const packageJsonPath = path.join(__dirname, '..', 'package.json');
-const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
-const version = packageJson.version;
-
-// Create centered header
-const title = `🐕 Husky Installer CLI v${version}`;
-const boxWidth = 42;
-const padding = Math.floor((boxWidth - title.length - 2) / 2);
-const paddedTitle =
-  ' '.repeat(padding) +
-  title +
-  ' '.repeat(boxWidth - title.length - padding - 2);
-
-console.log(chalk.green.bold('\n╔════════════════════════════════════════╗'));
-console.log(chalk.green.bold(`║${paddedTitle}║`));
-console.log(chalk.green.bold('╚════════════════════════════════════════╝\n'));
-
-function detectPackageManager() {
-  const cwd = process.cwd();
-
-  if (
-    fs.existsSync(path.join(cwd, 'bun.lockb')) ||
-    fs.existsSync(path.join(cwd, 'bun.lock'))
-  ) {
-    return 'bun';
-  }
-  if (fs.existsSync(path.join(cwd, 'pnpm-lock.yaml'))) {
-    return 'pnpm';
-  }
-  if (fs.existsSync(path.join(cwd, 'yarn.lock'))) {
-    return 'yarn';
-  }
-  if (fs.existsSync(path.join(cwd, 'package-lock.json'))) {
-    return 'npm';
-  }
-
-  return 'npm'; // default
+import * as t from '@clack/prompts';
+import { execSync as w, spawn as F } from 'child_process';
+import c from 'fs';
+import a from 'path';
+import { fileURLToPath as E } from 'url';
+import e from 'picocolors';
+var N = E(import.meta.url),
+  M = a.dirname(N),
+  _ = a.join(M, '..', 'package.json'),
+  A = JSON.parse(c.readFileSync(_, 'utf-8')),
+  I = A.version;
+function G() {
+  let o = `
+${e.cyan('\u250C\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510')}
+${e.cyan('\u2502')}                                                           ${e.cyan('\u2502')}
+${e.cyan('\u2502')}   ${e.bold(e.magenta('\u2566 \u2566\u2566 \u2566\u2554\u2550\u2557\u2566\u2554\u2550\u2566 \u2566'))}  ${e.bold(e.cyan('\u2566\u2554\u2557\u2554\u2554\u2550\u2557\u2554\u2566\u2557\u2554\u2550\u2557\u2566  \u2566  \u2554\u2550\u2557\u2566\u2550\u2557'))}   ${e.cyan('\u2502')}
+${e.cyan('\u2502')}   ${e.bold(e.magenta('\u2560\u2550\u2563\u2551 \u2551\u255A\u2550\u2557\u2560\u2569\u2557\u255A\u2566\u255D'))}  ${e.bold(e.cyan('\u2551\u2551\u2551\u2551\u255A\u2550\u2557 \u2551 \u2560\u2550\u2563\u2551  \u2551  \u2551\u2563 \u2560\u2566\u255D'))}   ${e.cyan('\u2502')}
+${e.cyan('\u2502')}   ${e.bold(e.magenta('\u2569 \u2569\u255A\u2550\u255D\u255A\u2550\u255D\u2569 \u2569 \u2569'))}   ${e.bold(e.cyan('\u2569\u255D\u255A\u255D\u255A\u2550\u255D \u2569 \u2569 \u2569\u2569\u2550\u255D\u2569\u2550\u255D\u255A\u2550\u255D\u2569\u255A\u2550'))}   ${e.cyan('\u2502')}
+${e.cyan('\u2502')}                                                           ${e.cyan('\u2502')}
+${e.cyan('\u2502')}   ${e.dim('\u{1F415} Set up Git hooks in seconds')}               ${e.yellow(`v${I}`)}   ${e.cyan('\u2502')}
+${e.cyan('\u2502')}                                                           ${e.cyan('\u2502')}
+${e.cyan('\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518')}
+`;
+  console.log(o);
 }
-
-function detectFramework() {
-  const cwd = process.cwd();
-  const packageJsonPath = path.join(cwd, 'package.json');
-
-  if (!fs.existsSync(packageJsonPath)) {
-    return { name: 'unknown', ignorePatterns: [] };
-  }
-
-  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
-  const deps = {
-    ...packageJson.dependencies,
-    ...packageJson.devDependencies,
-  };
-
-  // Framework detection with ignore patterns
-  const frameworks = {
-    next: {
-      check: () => deps['next'],
-      ignorePatterns: ['.next', 'out', '.vercel'],
-      name: 'Next.js',
-    },
-    react: {
-      check: () => deps['react'] && !deps['next'] && !deps['gatsby'],
-      ignorePatterns: ['build', 'dist'],
-      name: 'React',
-    },
-    vue: {
-      check: () => deps['vue'] || deps['nuxt'],
-      ignorePatterns: ['.nuxt', 'dist', '.output'],
-      name: deps['nuxt'] ? 'Nuxt' : 'Vue',
-    },
-    angular: {
-      check: () => deps['@angular/core'],
-      ignorePatterns: ['dist', '.angular'],
-      name: 'Angular',
-    },
-    svelte: {
-      check: () => deps['svelte'] || deps['@sveltejs/kit'],
-      ignorePatterns: ['.svelte-kit', 'build'],
-      name: deps['@sveltejs/kit'] ? 'SvelteKit' : 'Svelte',
-    },
-    astro: {
-      check: () => deps['astro'],
-      ignorePatterns: ['dist', '.astro'],
-      name: 'Astro',
-    },
-    gatsby: {
-      check: () => deps['gatsby'],
-      ignorePatterns: ['.cache', 'public'],
-      name: 'Gatsby',
-    },
-    vite: {
-      check: () => deps['vite'] && !deps['astro'] && !deps['@sveltejs/kit'],
-      ignorePatterns: ['dist'],
-      name: 'Vite',
-    },
-  };
-
-  for (const [key, framework] of Object.entries(frameworks)) {
-    if (framework.check()) {
-      return {
-        name: framework.name,
-        ignorePatterns: framework.ignorePatterns,
-      };
-    }
-  }
-
-  return { name: 'Node.js', ignorePatterns: ['dist', 'build'] };
+function $(o) {
+  return new Promise((i) => setTimeout(i, o));
 }
-
-async function main() {
+function H() {
+  let o = process.cwd();
+  return c.existsSync(a.join(o, 'bun.lockb')) ||
+    c.existsSync(a.join(o, 'bun.lock'))
+    ? 'bun'
+    : c.existsSync(a.join(o, 'pnpm-lock.yaml'))
+      ? 'pnpm'
+      : c.existsSync(a.join(o, 'yarn.lock'))
+        ? 'yarn'
+        : (c.existsSync(a.join(o, 'package-lock.json')), 'npm');
+}
+function J() {
+  let o = process.cwd(),
+    i = a.join(o, 'package.json');
+  if (!c.existsSync(i)) return { name: 'unknown', ignorePatterns: [] };
+  let d = JSON.parse(c.readFileSync(i, 'utf-8')),
+    n = { ...d.dependencies, ...d.devDependencies },
+    f = {
+      'react-native-expo': {
+        check: () => n.expo,
+        ignorePatterns: ['.expo', 'dist', 'node_modules', '.expo-shared'],
+        name: 'Expo (React Native)',
+        icon: '\u{1F4F1}',
+      },
+      'react-native': {
+        check: () => n['react-native'] && !n.expo,
+        ignorePatterns: ['android/app/build', 'ios/build', 'node_modules'],
+        name: 'React Native',
+        icon: '\u{1F4F1}',
+      },
+      next: {
+        check: () => n.next,
+        ignorePatterns: ['.next', 'out', '.vercel'],
+        name: 'Next.js',
+        icon: '\u25B2',
+      },
+      remix: {
+        check: () => n['@remix-run/react'],
+        ignorePatterns: ['build', '.cache', 'public/build'],
+        name: 'Remix',
+        icon: '\u{1F4BF}',
+      },
+      gatsby: {
+        check: () => n.gatsby,
+        ignorePatterns: ['.cache', 'public'],
+        name: 'Gatsby',
+        icon: '\u{1F49C}',
+      },
+      nuxt: {
+        check: () => n.nuxt,
+        ignorePatterns: ['.nuxt', 'dist', '.output'],
+        name: 'Nuxt',
+        icon: '\u{1F49A}',
+      },
+      vue: {
+        check: () => n.vue && !n.nuxt,
+        ignorePatterns: ['dist'],
+        name: 'Vue',
+        icon: '\u{1F49A}',
+      },
+      angular: {
+        check: () => n['@angular/core'],
+        ignorePatterns: ['dist', '.angular'],
+        name: 'Angular',
+        icon: '\u{1F170}\uFE0F',
+      },
+      sveltekit: {
+        check: () => n['@sveltejs/kit'],
+        ignorePatterns: ['.svelte-kit', 'build'],
+        name: 'SvelteKit',
+        icon: '\u{1F525}',
+      },
+      svelte: {
+        check: () => n.svelte && !n['@sveltejs/kit'],
+        ignorePatterns: ['build', 'dist'],
+        name: 'Svelte',
+        icon: '\u{1F525}',
+      },
+      astro: {
+        check: () => n.astro,
+        ignorePatterns: ['dist', '.astro'],
+        name: 'Astro',
+        icon: '\u{1F680}',
+      },
+      solid: {
+        check: () => n['solid-js'],
+        ignorePatterns: ['dist'],
+        name: 'SolidJS',
+        icon: '\u{1F499}',
+      },
+      qwik: {
+        check: () => n['@builder.io/qwik'],
+        ignorePatterns: ['dist', 'server', '.qwik'],
+        name: 'Qwik',
+        icon: '\u26A1',
+      },
+      electron: {
+        check: () => n.electron,
+        ignorePatterns: ['dist', 'out', 'build'],
+        name: 'Electron',
+        icon: '\u269B\uFE0F',
+      },
+      tauri: {
+        check: () => n['@tauri-apps/api'],
+        ignorePatterns: ['src-tauri/target', 'dist'],
+        name: 'Tauri',
+        icon: '\u{1F980}',
+      },
+      react: {
+        check: () =>
+          n.react && !n.next && !n.gatsby && !n['react-native'] && !n.expo,
+        ignorePatterns: ['build', 'dist'],
+        name: 'React',
+        icon: '\u269B\uFE0F',
+      },
+      vite: {
+        check: () => n.vite && !n.astro && !n['@sveltejs/kit'],
+        ignorePatterns: ['dist'],
+        name: 'Vite',
+        icon: '\u26A1',
+      },
+      express: {
+        check: () => n.express,
+        ignorePatterns: ['dist', 'build'],
+        name: 'Express',
+        icon: '\u{1F682}',
+      },
+      fastify: {
+        check: () => n.fastify,
+        ignorePatterns: ['dist', 'build'],
+        name: 'Fastify',
+        icon: '\u{1F680}',
+      },
+      nest: {
+        check: () => n['@nestjs/core'],
+        ignorePatterns: ['dist'],
+        name: 'NestJS',
+        icon: '\u{1F431}',
+      },
+    };
+  for (let [, s] of Object.entries(f))
+    if (s.check())
+      return { name: s.name, ignorePatterns: s.ignorePatterns, icon: s.icon };
+  return {
+    name: 'Node.js',
+    ignorePatterns: ['dist', 'build'],
+    icon: '\u{1F4E6}',
+  };
+}
+async function P(o, i, d) {
+  let n = t.spinner();
+  return (
+    n.start(i),
+    new Promise((f, s) => {
+      let k = F(o, { shell: !0, stdio: 'pipe' }),
+        p = '';
+      (k.stdout?.on('data', (r) => {
+        p += r.toString();
+      }),
+        k.stderr?.on('data', (r) => {
+          p += r.toString();
+        }),
+        k.on('close', (r) => {
+          r === 0
+            ? (n.stop(d || i), f(p))
+            : (n.stop(e.red(`Failed: ${i}`)), s(new Error(p)));
+        }),
+        k.on('error', (r) => {
+          (n.stop(e.red(`Failed: ${i}`)), s(r));
+        }));
+    })
+  );
+}
+async function O() {
+  (console.clear(), G(), t.intro(e.cyan("Let's set up your Git hooks")));
+  let o = t.spinner();
+  (o.start('Checking Git repository...'), await $(400));
   try {
-    // Check if in a git repository
-    try {
-      execSync('git rev-parse --git-dir', { stdio: 'ignore' });
-    } catch {
-      console.log(chalk.red.bold('\n❌ Git repository not found!\n'));
-      console.log(chalk.yellow('Husky requires a Git repository to work.\n'));
-      console.log(chalk.cyan('Please run these commands first:\n'));
-      console.log(chalk.white('  1. Initialize Git:'));
-      console.log(chalk.green('     git init\n'));
-      console.log(chalk.white('  2. Then run husky-installer again:'));
-      console.log(chalk.green('     npx husky-installer\n'));
-      process.exit(1);
-    }
+    (w('git rev-parse --git-dir', { stdio: 'ignore' }),
+      o.stop(e.green('Git repository found')));
+  } catch {
+    (o.stop(e.red('Git repository not found')),
+      t.cancel('Git repository not found!'),
+      t.note(
+        `${e.yellow('Husky requires a Git repository to work.')}
 
-    // Check if package.json exists
-    if (!fs.existsSync(path.join(process.cwd(), 'package.json'))) {
-      console.log(chalk.red.bold('\n❌ package.json not found!\n'));
-      console.log(chalk.yellow('This tool requires a Node.js project.\n'));
-      console.log(chalk.cyan('Please run these commands first:\n'));
-      console.log(chalk.white('  1. Initialize npm project:'));
-      console.log(chalk.green('     npm init -y\n'));
-      console.log(chalk.white('  2. Then run husky-installer again:'));
-      console.log(chalk.green('     npx husky-installer\n'));
-      process.exit(1);
-    }
+Run these commands first:
+  ${e.cyan('git init')}
+  ${e.cyan('npx husky-installer')}`,
+        'Next Steps'
+      ),
+      process.exit(1));
+  }
+  let i = t.spinner();
+  (i.start('Checking package.json...'),
+    await $(300),
+    c.existsSync(a.join(process.cwd(), 'package.json')) ||
+      (i.stop(e.red('package.json not found')),
+      t.cancel('package.json not found!'),
+      t.note(
+        `${e.yellow('This tool requires a Node.js project.')}
 
-    // Auto-detect package manager and framework
-    const packageManager = detectPackageManager();
-    const framework = detectFramework();
-
-    console.log(
-      chalk.cyan(`📦 Detected package manager: ${chalk.bold(packageManager)}`)
+Run these commands first:
+  ${e.cyan('npm init -y')}
+  ${e.cyan('npx husky-installer')}`,
+        'Next Steps'
+      ),
+      process.exit(1)),
+    i.stop(e.green('package.json found')));
+  let d = t.spinner();
+  (d.start('Detecting package manager...'), await $(500));
+  let n = H();
+  d.stop(`Package manager: ${e.cyan(e.bold(n))}`);
+  let f = t.spinner();
+  (f.start('Detecting framework...'), await $(500));
+  let s = J();
+  (f.stop(`Framework: ${s.icon} ${e.cyan(e.bold(s.name))}`), console.log(''));
+  let k = await t.group(
+      {
+        prettier: () =>
+          t.confirm({
+            message: 'Add Prettier for code formatting?',
+            initialValue: !0,
+          }),
+        eslint: () =>
+          t.confirm({
+            message: 'Add ESLint for code linting?',
+            initialValue: !0,
+          }),
+        emoji: () =>
+          t.confirm({
+            message: 'Enable automatic commit emoji prefixes?',
+            initialValue: !0,
+          }),
+      },
+      {
+        onCancel: () => {
+          (t.cancel('Installation cancelled.'), process.exit(0));
+        },
+      }
+    ),
+    { prettier: p, eslint: r, emoji: x } = k;
+  x &&
+    t.note(
+      `${e.dim('feat:')} add login     ${e.dim('\u2192')}  \u{1F680} feat: add login
+${e.dim('fix:')} button bug    ${e.dim('\u2192')}  \u{1F41B} fix: button bug
+${e.dim('docs:')} update readme ${e.dim('\u2192')}  \u{1F4DD} docs: update readme
+${e.dim('style:')} format code  ${e.dim('\u2192')}  \u{1F3A8} style: format code
+${e.dim('test:')} add tests     ${e.dim('\u2192')}  \u2705 test: add tests
+${e.dim('perf:')} optimize      ${e.dim('\u2192')}  \u26A1 perf: optimize
+${e.dim('refactor:')} cleanup   ${e.dim('\u2192')}  \u267B\uFE0F  refactor: cleanup
+${e.dim('chore:')} update deps  ${e.dim('\u2192')}  \u{1F527} chore: update deps`,
+      'Commit Prefix Examples'
     );
-    console.log(
-      chalk.cyan(`🎯 Detected framework: ${chalk.bold(framework.name)}\n`)
-    );
-
-    // Ask about Prettier
-    const usePrettier = await select({
-      message: 'Do you want to add Prettier (code formatting)?',
-      choices: [
-        { name: 'Yes', value: true },
-        { name: 'No', value: false },
-      ],
-      theme: {
-        style: {
-          highlight: (text) => chalk.underline.cyan(text),
-        },
-      },
-    });
-
-    // Ask about ESLint
-    const useEslint = await select({
-      message: 'Do you want to add ESLint (code linting)?',
-      choices: [
-        { name: 'Yes', value: true },
-        { name: 'No', value: false },
-      ],
-      theme: {
-        style: {
-          highlight: (text) => chalk.underline.cyan(text),
-        },
-      },
-    });
-
-    // Commit prefix configuration
-    const useEmoji = await select({
-      message: 'Enable automatic commit prefixes?',
-      choices: [
-        { name: 'Yes', value: true },
-        { name: 'No', value: false },
-      ],
-      theme: {
-        style: {
-          highlight: (text) => chalk.underline.cyan(text),
-        },
-      },
-    });
-
-    // Default to emoji characters style
-    const emojiStyle = 'emoji';
-
-    // Show emoji preview if enabled
-    if (useEmoji) {
-      console.log(chalk.cyan('\n📋 Commit prefix examples:\n'));
-      console.log(chalk.white('  feat: add login     →  🚀 feat: add login'));
-      console.log(chalk.white('  fix: button bug     →  🐛 fix: button bug'));
-      console.log(
-        chalk.white('  docs: update readme →  📝 docs: update readme')
-      );
-      console.log(
-        chalk.white('  style: format code  →  🎨 style: format code')
-      );
-      console.log(chalk.white('  test: add tests     →  ✅ test: add tests'));
-      console.log(chalk.white('  perf: optimize      →  ⚡ perf: optimize'));
-      console.log(
-        chalk.white('  refactor: cleanup   →  ♻️  refactor: cleanup')
-      );
-      console.log(
-        chalk.white('  chore: update deps  →  🔧 chore: update deps\n')
-      );
-    }
-
-    console.log(chalk.cyan('\n📦 Installing dependencies...\n'));
-
-    // Install dependencies
-    const devDeps = ['husky'];
-    if (usePrettier) devDeps.push('prettier');
-    if (useEslint) devDeps.push('eslint');
-
-    const installCmd =
-      packageManager === 'pnpm'
-        ? `pnpm add -D ${devDeps.join(' ')}`
-        : packageManager === 'yarn'
-          ? `yarn add -D ${devDeps.join(' ')}`
-          : packageManager === 'bun'
-            ? `bun add -D ${devDeps.join(' ')}`
-            : `npm install -D ${devDeps.join(' ')}`;
-
-    execSync(installCmd, { stdio: 'inherit' });
-
-    console.log(chalk.cyan('\n⚙️  Configuring Husky...\n'));
-
-    // Initialize Husky (new API)
-    execSync('npx husky init', { stdio: 'inherit' });
-
-    const huskyDir = path.join(process.cwd(), '.husky');
-
-    // Create pre-commit hook
-    if (usePrettier || useEslint) {
-      console.log(chalk.cyan('\n🪝 Creating pre-commit hook...\n'));
-
-      let preCommitContent = '';
-
-      // Build ignore patterns
-      const ignorePatterns = [
-        'node_modules',
-        '.husky',
-        ...framework.ignorePatterns,
-      ];
-
-      if (usePrettier) {
-        const prettierIgnores = ignorePatterns
-          .map((p) => `--ignore-path .gitignore`)
-          .join(' ');
-        preCommitContent += `npx prettier --write . --ignore-path .gitignore || true
+  let g = ['husky'];
+  (p && g.push('prettier'), r && g.push('eslint', '@eslint/js'));
+  let v =
+    n === 'pnpm'
+      ? `pnpm add -D ${g.join(' ')}`
+      : n === 'yarn'
+        ? `yarn add -D ${g.join(' ')}`
+        : n === 'bun'
+          ? `bun add -D ${g.join(' ')}`
+          : `npm install -D ${g.join(' ')}`;
+  (await P(
+    v,
+    'Installing dependencies...',
+    `Installed ${e.cyan(g.join(', '))}`
+  ),
+    await P('npx husky init', 'Initializing Husky...', 'Husky initialized'));
+  let b = a.join(process.cwd(), '.husky');
+  if (p || r) {
+    let l = t.spinner();
+    l.start('Creating pre-commit hook...');
+    let m = '',
+      y = ['node_modules', '.husky', ...s.ignorePatterns];
+    if (
+      (p &&
+        (m += `npx prettier --write . --ignore-path .gitignore || true
+git add .
+`),
+      r)
+    ) {
+      let h = y.map((j) => `--ignore-pattern "${j}"`).join(' ');
+      m += `npx eslint . --fix ${h} || true
 git add .
 `;
-      }
-
-      if (useEslint) {
-        const eslintIgnores = ignorePatterns
-          .map((p) => `--ignore-pattern "${p}"`)
-          .join(' ');
-        preCommitContent += `npx eslint . --fix ${eslintIgnores} || true
-git add .
-`;
-      }
-
-      fs.writeFileSync(path.join(huskyDir, 'pre-commit'), preCommitContent, {
-        mode: 0o755,
-      });
-      console.log(
-        chalk.green(
-          `✓ Created .husky/pre-commit (ignoring: ${ignorePatterns.join(', ')})`
-        )
-      );
     }
-
-    // Create commit-msg hook
-    if (useEmoji) {
-      console.log(chalk.cyan('\n📝 Creating commit-msg hook...\n'));
-
-      const commitMsgScript = generateCommitMsgScript(emojiStyle);
-      fs.writeFileSync(path.join(huskyDir, 'commit-msg.cjs'), commitMsgScript);
-
-      const commitMsgHook = `node .husky/commit-msg.cjs $1
-`;
-
-      fs.writeFileSync(path.join(huskyDir, 'commit-msg'), commitMsgHook, {
-        mode: 0o755,
-      });
-      console.log(chalk.green('✓ Created .husky/commit-msg'));
-    }
-
-    // Create config files
-    if (usePrettier) {
-      console.log(chalk.cyan('\n📄 Creating .prettierrc...\n'));
-      const prettierConfig = {
-        semi: true,
-        singleQuote: true,
-        trailingComma: 'es5',
-        tabWidth: 2,
-        printWidth: 80,
-      };
-      fs.writeFileSync('.prettierrc', JSON.stringify(prettierConfig, null, 2));
-
-      // Create .prettierignore with framework-specific patterns
-      const prettierIgnore = [
-        'node_modules',
-        'package-lock.json',
-        'yarn.lock',
-        'pnpm-lock.yaml',
-        'bun.lockb',
-        ...framework.ignorePatterns,
-      ].join('\n');
-
-      fs.writeFileSync('.prettierignore', prettierIgnore + '\n');
-      console.log(
-        chalk.green(`✓ Created .prettierignore (${framework.name} optimized)`)
-      );
-    }
-
-    if (useEslint) {
-      console.log(chalk.cyan('\n📄 Configuring ESLint...\n'));
-
-      const eslintConfigPath = 'eslint.config.js';
-      const eslintConfigMjsPath = 'eslint.config.mjs';
-
-      // Check if flat config exists
-      if (
-        fs.existsSync(eslintConfigPath) ||
-        fs.existsSync(eslintConfigMjsPath)
-      ) {
-        console.log(
-          chalk.yellow('⚠ ESLint config already exists, skipping creation')
-        );
-        console.log(
-          chalk.cyan(
-            '💡 Make sure to add .husky to ignores in your eslint.config.js:'
-          )
-        );
-        console.log(
-          chalk.gray('   ignores: ["dist", ".husky", "node_modules"]')
-        );
-      } else {
-        // Create basic flat config with framework-specific ignores
-        const eslintIgnores = [
-          'node_modules',
-          '.husky',
-          ...framework.ignorePatterns,
-        ];
-
-        const eslintFlatConfig = `import js from '@eslint/js';
+    (c.writeFileSync(a.join(b, 'pre-commit'), m, { mode: 493 }),
+      l.stop(
+        `Created ${e.cyan('.husky/pre-commit')} ${e.dim(`(ignoring: ${y.join(', ')})`)}`
+      ));
+  }
+  if (x) {
+    let l = t.spinner();
+    l.start('Creating commit-msg hook...');
+    let y = T('emoji');
+    (c.writeFileSync(a.join(b, 'commit-msg.cjs'), y),
+      c.writeFileSync(
+        a.join(b, 'commit-msg'),
+        `node .husky/commit-msg.cjs $1
+`,
+        { mode: 493 }
+      ),
+      l.stop(`Created ${e.cyan('.husky/commit-msg')}`));
+  }
+  if (p) {
+    let l = t.spinner();
+    l.start('Creating Prettier config...');
+    let m = {
+      semi: !0,
+      singleQuote: !0,
+      trailingComma: 'es5',
+      tabWidth: 2,
+      printWidth: 80,
+    };
+    c.writeFileSync('.prettierrc', JSON.stringify(m, null, 2));
+    let y = [
+      'node_modules',
+      'package-lock.json',
+      'yarn.lock',
+      'pnpm-lock.yaml',
+      'bun.lockb',
+      ...s.ignorePatterns,
+    ].join(`
+`);
+    (c.writeFileSync(
+      '.prettierignore',
+      y +
+        `
+`
+    ),
+      l.stop(
+        `Created ${e.cyan('.prettierrc')} and ${e.cyan('.prettierignore')}`
+      ));
+  }
+  if (r) {
+    let l = t.spinner();
+    l.start('Configuring ESLint...');
+    let m = 'eslint.config.js';
+    if (c.existsSync(m) || c.existsSync('eslint.config.mjs'))
+      (l.stop(
+        `${e.yellow('ESLint config exists')} ${e.dim('- skipped creation')}`
+      ),
+        t.log.warn(
+          `Add ${e.cyan('.husky')} to ignores in your eslint.config.js`
+        ));
+    else {
+      let h = ['node_modules', '.husky', ...s.ignorePatterns],
+        j = `import js from '@eslint/js';
 
 export default [
   js.configs.recommended,
   {
-    ignores: ${JSON.stringify(eslintIgnores)},
+    ignores: ${JSON.stringify(h)},
   },
   {
     languageOptions: {
@@ -386,109 +398,61 @@ export default [
   },
 ];
 `;
-        fs.writeFileSync(eslintConfigPath, eslintFlatConfig);
-        console.log(chalk.green('✓ Created eslint.config.js with flat config'));
-      }
+      (c.writeFileSync(m, j), l.stop(`Created ${e.cyan('eslint.config.js')}`));
     }
-
-    // Add husky enable/disable scripts to package.json
-    console.log(chalk.cyan('\n📝 Adding Husky control scripts...\n'));
-    execSync(
-      'npm pkg set scripts.husky:disable="git config core.hooksPath /dev/null"',
-      { stdio: 'inherit' }
-    );
-    execSync(
-      'npm pkg set scripts.husky:enable="git config core.hooksPath .husky"',
-      { stdio: 'inherit' }
-    );
-    console.log(chalk.green('✓ Added husky:disable and husky:enable scripts'));
-
-    console.log(
-      chalk.green.bold('\n╔════════════════════════════════════════╗')
-    );
-    console.log(chalk.green.bold('║  ✅ Installation Complete!            ║'));
-    console.log(
-      chalk.green.bold('╚════════════════════════════════════════╝\n')
-    );
-
-    console.log(chalk.cyan('📝 What was installed:\n'));
-    console.log(chalk.white(`   ✓ Framework: ${framework.name}`));
-    if (usePrettier)
-      console.log(chalk.white('   ✓ Prettier (code formatting)'));
-    if (useEslint) console.log(chalk.white('   ✓ ESLint (code linting)'));
-    if (useEmoji) console.log(chalk.white('   ✓ Commit emoji prefixes'));
-    console.log(chalk.white('   ✓ Git hooks configured'));
-    if (framework.ignorePatterns.length > 0) {
-      console.log(
-        chalk.gray(
-          `   ✓ Auto-ignoring: ${framework.ignorePatterns.join(', ')}\n`
-        )
-      );
-    } else {
-      console.log('');
-    }
-
-    console.log(chalk.yellow('🚀 Try it now:\n'));
-    console.log(chalk.white('   1. Stage some files:'));
-    console.log(chalk.green('      git add .\n'));
-    console.log(chalk.white('   2. Make a commit:'));
-    console.log(chalk.green('      git commit -m "feat: test husky hooks"\n'));
-
-    console.log(chalk.cyan('💡 Useful commands:\n'));
-    console.log(
-      chalk.white(
-        `   ${packageManager} run husky:disable  ${chalk.gray('# Temporarily disable hooks')}`
-      )
-    );
-    console.log(
-      chalk.white(
-        `   ${packageManager} run husky:enable   ${chalk.gray('# Re-enable hooks')}\n`
-      )
-    );
-  } catch (error) {
-    if (error.message.includes('User force closed')) {
-      console.log(chalk.yellow('\n⚠️  Installation cancelled by user.\n'));
-      process.exit(0);
-    }
-
-    console.log(chalk.red.bold('\n❌ Installation failed!\n'));
-    console.log(chalk.yellow('Error details:'));
-    console.log(chalk.white(`  ${error.message}\n`));
-
-    if (
-      error.message.includes('EACCES') ||
-      error.message.includes('permission')
-    ) {
-      console.log(chalk.cyan('💡 Try running with elevated permissions:\n'));
-      console.log(chalk.green('   sudo npx husky-installer\n'));
-    } else if (
-      error.message.includes('ENOENT') ||
-      error.message.includes('not found')
-    ) {
-      console.log(
-        chalk.cyan('💡 Make sure you have the required tools installed:\n')
-      );
-      console.log(chalk.white('   - Node.js >= 18.0.0'));
-      console.log(chalk.white('   - Git'));
-      console.log(chalk.white('   - npm/yarn/pnpm/bun\n'));
-    } else {
-      console.log(chalk.cyan('💡 For help, please report this issue:\n'));
-      console.log(
-        chalk.green(
-          '   https://github.com/ShabanMughal/husky-installer/issues\n'
-        )
-      );
-    }
-
-    process.exit(1);
   }
+  let S = t.spinner();
+  (S.start('Adding Husky control scripts...'),
+    w(
+      'npm pkg set scripts.husky:disable="git config core.hooksPath /dev/null"',
+      { stdio: 'pipe' }
+    ),
+    w('npm pkg set scripts.husky:enable="git config core.hooksPath .husky"', {
+      stdio: 'pipe',
+    }),
+    S.stop(
+      `Added ${e.cyan('husky:disable')} and ${e.cyan('husky:enable')} scripts`
+    ));
+  let u = [];
+  (u.push(`${e.green('\u2713')} Framework: ${s.icon} ${e.cyan(s.name)}`),
+    p && u.push(`${e.green('\u2713')} Prettier (code formatting)`),
+    r && u.push(`${e.green('\u2713')} ESLint (code linting)`),
+    x && u.push(`${e.green('\u2713')} Commit emoji prefixes`),
+    u.push(`${e.green('\u2713')} Git hooks configured`),
+    s.ignorePatterns.length > 0 &&
+      u.push(
+        `${e.green('\u2713')} Auto-ignoring: ${e.dim(s.ignorePatterns.join(', '))}`
+      ),
+    t.note(
+      u.join(`
+`),
+      'Installed'
+    ));
+  let C = [
+    `${e.cyan('1.')} Stage some files:`,
+    `   ${e.dim('$')} ${e.cyan('git add .')}`,
+    '',
+    `${e.cyan('2.')} Make a commit:`,
+    `   ${e.dim('$')} ${e.cyan('git commit -m "feat: test husky hooks"')}`,
+    '',
+    `${e.yellow('\u{1F4A1}')} Useful commands:`,
+    `   ${e.dim('$')} ${e.cyan(`${n} run husky:disable`)} ${e.dim('# Temporarily disable hooks')}`,
+    `   ${e.dim('$')} ${e.cyan(`${n} run husky:enable`)} ${e.dim('# Re-enable hooks')}`,
+  ];
+  (t.note(
+    C.join(`
+`),
+    'Next Steps'
+  ),
+    t.outro(
+      `${e.green('\u2728')} ${e.bold('Setup complete!')} Happy coding! \u{1F389}`
+    ));
 }
-
-function generateCommitMsgScript(emojiStyle) {
-  let mapping = '';
-
-  if (emojiStyle === 'shortcode') {
-    mapping = `  feat: ':rocket:',
+function T(o) {
+  let i = '';
+  return (
+    o === 'shortcode'
+      ? (i = `  feat: ':rocket:',
   fix: ':bug:',
   chore: ':wrench:',
   docs: ':memo:',
@@ -501,9 +465,9 @@ function generateCommitMsgScript(emojiStyle) {
   breaking: ':boom:',
   hotfix: ':fire:',
   wip: ':construction:',
-  release: ':bookmark:'`;
-  } else if (emojiStyle === 'tag') {
-    mapping = `  feat: '[feat]',
+  release: ':bookmark:'`)
+      : o === 'tag'
+        ? (i = `  feat: '[feat]',
   fix: '[fix]',
   chore: '[chore]',
   docs: '[docs]',
@@ -516,48 +480,52 @@ function generateCommitMsgScript(emojiStyle) {
   breaking: '[breaking]',
   hotfix: '[hotfix]',
   wip: '[wip]',
-  release: '[release]'`;
-  } else {
-    mapping = `  feat: '🚀',
-  fix: '🐛',
-  chore: '🔧',
-  docs: '📝',
-  refactor: '♻️',
-  test: '✅',
-  style: '🎨',
-  perf: '⚡',
-  build: '📦',
-  ci: '⚙️',
-  breaking: '💥',
-  hotfix: '🔥',
-  wip: '🚧',
-  release: '🔖'`;
-  }
-
-  return `const fs = require('fs');
+  release: '[release]'`)
+        : (i = `  feat: '\u{1F680}',
+  fix: '\u{1F41B}',
+  chore: '\u{1F527}',
+  docs: '\u{1F4DD}',
+  refactor: '\u267B\uFE0F',
+  test: '\u2705',
+  style: '\u{1F3A8}',
+  perf: '\u26A1',
+  build: '\u{1F4E6}',
+  ci: '\u2699\uFE0F',
+  breaking: '\u{1F4A5}',
+  hotfix: '\u{1F525}',
+  wip: '\u{1F6A7}',
+  release: '\u{1F516}'`),
+    `const fs = require('fs');
 const msgFile = process.argv[2];
 const msg = fs.readFileSync(msgFile, 'utf-8').trim();
 
 // Colors for terminal output
-const colors = {
+const c = {
   reset: '\\x1b[0m',
+  bold: '\\x1b[1m',
+  dim: '\\x1b[2m',
   green: '\\x1b[32m',
   cyan: '\\x1b[36m',
+  magenta: '\\x1b[35m',
   yellow: '\\x1b[33m',
   gray: '\\x1b[90m',
   white: '\\x1b[37m',
+  bgCyan: '\\x1b[46m',
+  black: '\\x1b[30m',
 };
 
+// Print styled header
 console.log('');
-console.log(colors.cyan + '╔═══════════════════════════════════════════════╗' + colors.reset);
-console.log(colors.cyan + '║     🐕 Husky Installer Commit Message Hook      ║' + colors.reset);
-console.log(colors.cyan + '╚═══════════════════════════════════════════════╝' + colors.reset);
+console.log(c.cyan + '\u250C\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510' + c.reset);
+console.log(c.cyan + '\u2502' + c.reset + '  \u{1F415} ' + c.bold + c.magenta + 'HUSKY' + c.reset + ' ' + c.bold + c.cyan + 'COMMIT HOOK' + c.reset + '             ' + c.cyan + '\u2502' + c.reset);
+console.log(c.cyan + '\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518' + c.reset);
 console.log('');
 
 // If message already has prefix, skip
 if (/^(\\[[a-z]+\\]|:[a-z0-9_+-]+: |[\\p{Emoji}])/u.test(msg)) {
-  console.log(colors.gray + '→ Message already has prefix, skipping...' + colors.reset);
-  console.log(colors.white + '→ ' + msg + colors.reset);
+  console.log(c.cyan + '\u25C7' + c.reset + '  ' + c.dim + 'Already has prefix, skipping...' + c.reset);
+  console.log(c.cyan + '\u2502' + c.reset);
+  console.log(c.cyan + '\u2514' + c.reset + '  ' + c.white + msg + c.reset);
   console.log('');
   process.exit(0);
 }
@@ -565,30 +533,61 @@ if (/^(\\[[a-z]+\\]|:[a-z0-9_+-]+: |[\\p{Emoji}])/u.test(msg)) {
 // Extract conventional commit type
 const match = msg.match(/^([a-z][a-z0-9_-]*)/);
 if (!match) {
-  console.log(colors.yellow + '⚠ No conventional commit type found' + colors.reset);
-  console.log(colors.gray + '→ ' + msg + colors.reset);
+  console.log(c.yellow + '\u25C7' + c.reset + '  ' + c.yellow + 'No conventional commit type detected' + c.reset);
+  console.log(c.cyan + '\u2502' + c.reset);
+  console.log(c.cyan + '\u2514' + c.reset + '  ' + c.dim + msg + c.reset);
   console.log('');
   process.exit(0);
 }
 
 const type = match[1];
 const emojiMap = {
-${mapping}
+${i}
 };
 
 const prefix = emojiMap[type];
 if (prefix) {
   const newMsg = \`\${prefix} \${msg}\`;
   fs.writeFileSync(msgFile, newMsg, 'utf-8');
-  console.log(colors.green + '✓ Added emoji prefix!' + colors.reset);
-  console.log(colors.gray + '  Before: ' + colors.reset + msg);
-  console.log(colors.white + '  After:  ' + colors.reset + newMsg);
+  console.log(c.green + '\u25C6' + c.reset + '  ' + c.green + c.bold + 'Emoji prefix added!' + c.reset);
+  console.log(c.cyan + '\u2502' + c.reset);
+  console.log(c.cyan + '\u2502' + c.reset + '  ' + c.dim + 'Before: ' + c.reset + c.gray + msg + c.reset);
+  console.log(c.cyan + '\u2502' + c.reset + '  ' + c.dim + 'After:  ' + c.reset + c.white + c.bold + newMsg + c.reset);
+  console.log(c.cyan + '\u2502' + c.reset);
+  console.log(c.cyan + '\u2514' + c.reset + '  ' + c.dim + 'Commit type: ' + c.reset + c.cyan + type + c.reset);
   console.log('');
 } else {
-  console.log(colors.gray + '→ No emoji mapping for type: ' + type + colors.reset);
-  console.log(colors.white + '→ ' + msg + colors.reset);
+  console.log(c.yellow + '\u25C7' + c.reset + '  ' + c.dim + 'No emoji mapping for: ' + c.reset + c.yellow + type + c.reset);
+  console.log(c.cyan + '\u2502' + c.reset);
+  console.log(c.cyan + '\u2514' + c.reset + '  ' + c.white + msg + c.reset);
   console.log('');
-}`;
+}`
+  );
 }
-
-main();
+O().catch((o) => {
+  ((o.message?.includes('User force closed') ||
+    o.message?.includes('cancelled')) &&
+    (t.cancel('Installation cancelled.'), process.exit(0)),
+    t.cancel('Installation failed!'),
+    t.log.error(o.message),
+    o.message?.includes('EACCES') || o.message?.includes('permission')
+      ? t.note(
+          `Try running with elevated permissions:
+  ${e.cyan('sudo npx husky-installer')}`,
+          'Tip'
+        )
+      : o.message?.includes('ENOENT') || o.message?.includes('not found')
+        ? t.note(
+            `Make sure you have the required tools installed:
+  ${e.dim('\u2022')} Node.js >= 18.0.0
+  ${e.dim('\u2022')} Git
+  ${e.dim('\u2022')} npm/yarn/pnpm/bun`,
+            'Requirements'
+          )
+        : t.note(
+            `For help, please report this issue:
+  ${e.cyan('https://github.com/ShabanMughal/husky-installer/issues')}`,
+            'Help'
+          ),
+    process.exit(1));
+});
